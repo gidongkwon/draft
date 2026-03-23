@@ -1,18 +1,14 @@
 import { createFileRoute } from "@tanstack/solid-router";
-import { fetchPost } from "../posts";
+import { PostDetailPage } from "../pages/post-detail";
+import { fetchPostDetail } from "../shared/api/server-queries";
 
 export const Route = createFileRoute("/posts/$postId")({
-  loader: async ({ params: { postId } }) => fetchPost(postId),
-  component: PostComponent,
+  loader: ({ params }) => fetchPostDetail({ data: params.postId }),
+  component: PostDetailRoute,
 });
 
-function PostComponent() {
-  const post = Route.useLoaderData();
+function PostDetailRoute() {
+  const data = Route.useLoaderData();
 
-  return (
-    <div class="space-y-2">
-      <h4 class="text-xl font-bold underline">{post().title}</h4>
-      <div class="text-sm">{post().body}</div>
-    </div>
-  );
+  return <PostDetailPage data={data()} />;
 }

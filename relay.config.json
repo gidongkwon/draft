@@ -1,0 +1,22 @@
+{
+  "$schema": "./node_modules/relay-compiler/relay-compiler-config-schema.json",
+  "src": "./src",
+  "language": "typescript",
+  "schema": "./graphql/schema.graphql",
+  "codegenCommand": "./node_modules/.bin/relay-compiler",
+  "eagerEsModules": true,
+  "customScalarTypes": {
+    "Date": "string",
+    "DateTime": "string",
+    "Email": "string",
+    "HTML": "string",
+    "IP": "string",
+    "JSON": "unknown",
+    "Locale": "string",
+    "Markdown": "string",
+    "MediaType": "string",
+    "URL": "string",
+    "URITemplate": "string",
+    "UUID": "`${string}-${string}-${string}-${string}-${string}`"
+  }
+}

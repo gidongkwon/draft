@@ -1,61 +1,145 @@
-import { Link, Outlet, createRootRoute } from "@tanstack/solid-router";
-import { TanStackRouterDevtools } from "@tanstack/solid-router-devtools";
+/// <reference types="vite/client" />
 
-export const Route = createRootRoute({
+import "../styles.css";
+
+import { MetaProvider } from "@solidjs/meta";
+import {
+  HeadContent,
+  Outlet,
+  Scripts,
+  createRootRouteWithContext,
+  useRouter,
+} from "@tanstack/solid-router";
+import { TanStackRouterDevtools } from "@tanstack/solid-router-devtools";
+import { useServerFn } from "@tanstack/solid-start";
+import { Suspense } from "solid-js";
+import { HydrationScript } from "solid-js/web";
+import { RelayProvider } from "../app/providers/relay-provider";
+import { createAuthModalStore } from "../features/auth/model/auth-modal-store";
+import { createProtectedActionGate } from "../features/auth/model/protected-action-gate";
+import { AuthTriggerProvider } from "../features/auth/ui/auth-trigger-context";
+import { AuthModal } from "../features/auth/ui/auth-modal";
+import type { AppRouterContext } from "../app/router/context";
+import { createAppRouterContext } from "../app/router/current-request";
+import { AppShell } from "../app/ui/app-shell";
+import { RootRouteErrorView } from "../app/ui/root-route-error-view";
+import { getRelayEnvironment } from "../shared/api/relay";
+import {
+  completeSignIn,
+  getCurrentViewer,
+  requestSignInChallenge,
+  signOut,
+} from "../shared/auth/server";
+
+export const Route = createRootRouteWithContext<AppRouterContext>()({
+  beforeLoad: async () => {
+    const auth = await getCurrentViewer();
+    return createAppRouterContext({
+      viewer: auth.viewer,
+    });
+  },
+  head: () => ({
+    meta: [
+      {
+        charSet: "utf-8",
+      },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
+      },
+      {
+        title: "Draft",
+      },
+    ],
+  }),
+  shellComponent: RootDocument,
   component: RootComponent,
+  errorComponent: RootRouteErrorView,
   notFoundComponent: () => {
     return (
-      <div>
-        <p>This is the notFoundComponent configured on root route</p>
-        <Link to="/">Start Over</Link>
-      </div>
+      <section class="mx-auto max-w-3xl px-6 py-16">
+        <p class="text-sm tracking-[0.24em] text-stone-500">Not found</p>
+        <h1 class="mt-4 font-code text-4xl">This page does not exist.</h1>
+        <a class="mt-6 inline-flex text-sm font-medium text-amber-700 underline" href="/">
+          Return to the latest feed
+        </a>
+      </section>
     );
   },
 });
 
-function RootComponent() {
+function RootDocument(props: { children: import("solid-js").JSX.Element }) {
   return (
-    <>
-      <div class="p-2 flex gap-2 text-lg border-b">
-        <Link
-          to="/"
-          activeProps={{
-            class: "font-bold",
-          }}
-          activeOptions={{ exact: true }}
+    <html lang="en">
+      <head>
+        <HydrationScript />
+      </head>
+      <body>
+        <MetaProvider>
+          <HeadContent />
+          <Suspense>{props.children}</Suspense>
+          <Scripts />
+        </MetaProvider>
+      </body>
+    </html>
+  );
+}
+
+function RootComponent() {
+  const router = useRouter();
+  const routeContext = Route.useRouteContext();
+  const authModal = createAuthModalStore();
+  const requestSignInChallengeFn = useServerFn(requestSignInChallenge);
+  const completeSignInFn = useServerFn(completeSignIn);
+  const signOutFn = useServerFn(signOut);
+  const protectedActionGate = createProtectedActionGate({
+    isAuthenticated: () => Boolean(routeContext().viewer),
+    openAuth: (action) => authModal.openForAction(action),
+  });
+
+  async function onSignOut() {
+    await signOutFn();
+    await router.invalidate();
+  }
+
+  function onNewPost() {
+    protectedActionGate.run({ type: "new-post" }, () => {
+      window.location.assign("/#compose-entry");
+    });
+  }
+
+  async function onSignedIn() {
+    await router.invalidate();
+    protectedActionGate.resume();
+  }
+
+  return (
+    <RelayProvider environment={getRelayEnvironment()}>
+      <AuthTriggerProvider onSignInClick={() => authModal.openDirectly()}>
+        <AppShell
+          onNewPost={onNewPost}
+          onSignInClick={() => authModal.openDirectly()}
+          onSignOut={onSignOut}
+          viewer={routeContext().viewer}
         >
-          Home
-        </Link>{" "}
-        <Link
-          to="/posts"
-          activeProps={{
-            class: "font-bold",
-          }}
-        >
-          Posts
-        </Link>{" "}
-        <Link
-          to="/layout-a"
-          activeProps={{
-            class: "font-bold",
-          }}
-        >
-          Layout
-        </Link>{" "}
-        <Link
-          // @ts-expect-error
-          to="/this-route-does-not-exist"
-          activeProps={{
-            class: "font-bold",
-          }}
-        >
-          This Route Does Not Exist
-        </Link>
-      </div>
-      <hr />
-      <Outlet />
-      {/* Start rendering router matches */}
-      <TanStackRouterDevtools position="bottom-right" />
-    </>
+          <Outlet />
+          <AuthModal
+            open={authModal.state.open}
+            onClose={() => authModal.close()}
+            onSignedIn={onSignedIn}
+            completeSignIn={({ code, token }) => completeSignInFn({ data: { code, token } })}
+            requestChallenge={({ identifier }) =>
+              requestSignInChallengeFn({
+                data: {
+                  identifier,
+                  locale: "en",
+                },
+              })
+            }
+          />
+          <TanStackRouterDevtools position="bottom-right" />
+        </AppShell>
+      </AuthTriggerProvider>
+    </RelayProvider>
   );
 }

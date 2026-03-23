@@ -29,3 +29,7 @@ Thumbs.db
 
 # Generated Files
 *.gen.ts
+output/
+
+# AI
+.superpowers/
