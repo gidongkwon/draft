@@ -28,7 +28,6 @@ describe("ProfileSummaryCard", () => {
       "/profiles/@alice",
     );
     expect(screen.getByText("@alice")).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="calendar"]')).toBeTruthy();
   });
 
   it("shows an initials placeholder when the profile avatar is unavailable", () => {

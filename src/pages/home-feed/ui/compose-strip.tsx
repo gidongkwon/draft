@@ -1,3 +1,5 @@
+import Image20Regular from "~icons/fluent/image-20-regular";
+import Send20Filled from "~icons/fluent/send-20-filled";
 import { AppIcon } from "../../../shared/ui/app-icon";
 
 export function ComposeStrip() {
@@ -16,7 +18,7 @@ export function ComposeStrip() {
         <div class="flex items-center justify-between gap-3">
           <div>
             <button aria-label="Add image" class="p-2" type="button">
-              <AppIcon class="text-lg" name="image" />
+              <AppIcon icon={Image20Regular} size="lg" />
             </button>
           </div>
           <button
@@ -24,7 +26,7 @@ export function ComposeStrip() {
             class="focus-ring inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--accent-soft)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:border-[var(--border-strong)]"
             type="button"
           >
-            <AppIcon class="text-base" name="send" />
+            <AppIcon icon={Send20Filled} size="sm" />
           </button>
         </div>
       </div>

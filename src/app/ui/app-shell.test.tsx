@@ -14,8 +14,6 @@ describe("AppShell", () => {
 
     expect(screen.getByRole("link", { name: "draft" }).getAttribute("href")).toBe("/");
     expect(screen.getByRole("link", { name: "Timeline" }).getAttribute("href")).toBe("/");
-    expect(document.querySelector('[data-app-icon="home"]')).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="notification"]')).toBeTruthy();
     expect(screen.queryByRole("link", { name: "Notifications" })).toBeTruthy();
     expect(screen.getByRole("button", { name: "Sign in" })).toBeTruthy();
     expect(screen.getByText("Page body")).toBeTruthy();

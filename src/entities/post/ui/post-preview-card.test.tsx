@@ -38,9 +38,6 @@ describe("PostPreviewCard", () => {
     );
     expect(screen.getByText("@alice")).toBeTruthy();
     expect(screen.getByText("8")).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="reaction"]')).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="reply"]')).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="share"]')).toBeTruthy();
   });
 
   it("renders a note card without a headline when the post has no title", () => {

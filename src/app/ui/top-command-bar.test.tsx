@@ -12,8 +12,7 @@ describe("TopCommandBar", () => {
 
     expect(screen.getByRole("link", { name: "draft" }).getAttribute("href")).toBe("/");
     expect(screen.getByRole("searchbox")).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="search"]')).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="compose"]')).toBeTruthy();
+    expect(document.querySelector("[data-app-icon]")).toBeNull();
     expect(screen.getByRole("button", { name: "Custom action" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "New post" }));
     expect(onNewPost).toHaveBeenCalled();

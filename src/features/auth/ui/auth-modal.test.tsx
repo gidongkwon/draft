@@ -14,14 +14,12 @@ describe("AuthModal", () => {
       <AuthModal open completeSignIn={completeSignIn} requestChallenge={requestChallenge} />
     ));
 
-    expect(document.querySelector('[data-app-icon="dismiss"]')).toBeTruthy();
     fireEvent.input(screen.getByLabelText(/email or username/i), {
       target: { value: "lucid" },
     });
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
 
     expect(await screen.findByLabelText(/verification code/i)).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="password"]')).toBeTruthy();
   });
 
   it("shows an inline error when completing sign-in throws", async () => {

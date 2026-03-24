@@ -1,6 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
 import devtools from "solid-devtools/vite";
+import Icons from "unplugin-icons/vite";
 import relay from "vite-plugin-relay-lite";
 import solid from "vite-plugin-solid";
 import { defineConfig } from "vite-plus";
@@ -39,6 +40,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     tanstackStart(),
+    Icons({ compiler: "solid" }),
     relay({ codegen: shouldRunRelayCodegen }),
     devtools(),
     solid({ ssr: !isTestMode }),

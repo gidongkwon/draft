@@ -12,12 +12,13 @@
     "prepare": "vp config"
   },
   "dependencies": {
-    "@iconify-icons/fluent": "^1.2.38",
+    "@iconify-json/fluent": "^1.2.41",
     "@solidjs/meta": "^0.29.4",
     "@tailwindcss/postcss": "^4.1.13",
     "@tanstack/solid-router": "^1.168.2",
     "@tanstack/solid-router-devtools": "^1.166.11",
     "@tanstack/solid-start": "^1.167.3",
+    "class-variance-authority": "^0.7.1",
     "graphql": "16.11.0",
     "postcss": "^8.5.6",
     "redaxios": "^0.5.1",
@@ -37,6 +38,7 @@
     "relay-compiler": "19.0.0",
     "solid-devtools": "^0.34.3",
     "typescript": "^5.9.2",
+    "unplugin-icons": "^23.0.1",
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
     "vite-plugin-relay-lite": "0.11.0",
     "vite-plugin-solid": "^2.11.11",

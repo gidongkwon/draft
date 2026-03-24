@@ -1,4 +1,7 @@
 import { Show, createSignal } from "solid-js";
+import Dismiss20Regular from "~icons/fluent/dismiss-20-regular";
+import Key20Filled from "~icons/fluent/key-20-filled";
+import PersonArrowLeft20Regular from "~icons/fluent/person-arrow-left-20-regular";
 import { AppIcon } from "../../../shared/ui/app-icon";
 
 type ChallengeResult =
@@ -114,7 +117,7 @@ export function AuthModal(props: AuthModalProps) {
               type="button"
               onClick={() => props.onClose?.()}
             >
-              <AppIcon class="text-base" name="dismiss" />
+              <AppIcon icon={Dismiss20Regular} size="sm" />
               Close
             </button>
           </div>
@@ -136,7 +139,7 @@ export function AuthModal(props: AuthModalProps) {
                 type="button"
                 onClick={onRequestChallenge}
               >
-                <AppIcon class="text-base" name="signIn" testName="sign-in" />
+                <AppIcon icon={PersonArrowLeft20Regular} size="sm" />
                 {loading() ? "Requesting..." : "Sign in"}
               </button>
             </div>
@@ -159,7 +162,7 @@ export function AuthModal(props: AuthModalProps) {
                 type="button"
                 onClick={onCompleteSignIn}
               >
-                <AppIcon class="text-base" name="password" />
+                <AppIcon icon={Key20Filled} size="sm" />
                 {loading() ? "Completing..." : "Complete sign in"}
               </button>
             </div>

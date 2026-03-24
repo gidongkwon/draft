@@ -1,3 +1,6 @@
+import Comment20Regular from "~icons/fluent/comment-20-regular";
+import Heart20Regular from "~icons/fluent/heart-20-regular";
+import Share20Regular from "~icons/fluent/share-20-regular";
 import type { PostCardModel } from "../model/post-card";
 import { formatPublishedDate } from "../../../shared/lib/date";
 import { AppIcon } from "../../../shared/ui/app-icon";
@@ -56,17 +59,17 @@ export function PostPreviewCard(props: PostPreviewCardProps) {
         )}
         <ul class="mt-4 flex flex-wrap gap-4 text-sm font-medium tracking-[0.18em] text-[var(--text-muted)]">
           <li class="inline-flex items-center gap-1.5">
-            <AppIcon class="text-md" name="reaction" />
+            <AppIcon icon={Heart20Regular} size="sm" />
             {props.post.stats.reactions}
             <span class="sr-only"> reactions</span>
           </li>
           <li class="inline-flex items-center gap-1.5">
-            <AppIcon class="text-md" name="reply" />
+            <AppIcon icon={Comment20Regular} size="sm" />
             {props.post.stats.replies}
             <span class="sr-only"> replies</span>
           </li>
           <li class="inline-flex items-center gap-1.5">
-            <AppIcon class="text-md" name="share" />
+            <AppIcon icon={Share20Regular} size="sm" />
             {props.post.stats.shares}
             <span class="sr-only"> shares</span>
           </li>

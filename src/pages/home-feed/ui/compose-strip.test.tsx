@@ -10,7 +10,6 @@ describe("ComposeStrip", () => {
     expect(screen.getByRole("textbox")).toBeTruthy();
     expect(screen.getByPlaceholderText("Share your thoughts")).toBeTruthy();
     expect(screen.getByRole("button", { name: "Publish" })).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="send"]')).toBeTruthy();
   });
 });
 

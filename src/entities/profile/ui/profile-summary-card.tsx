@@ -1,3 +1,4 @@
+import Calendar20Regular from "~icons/fluent/calendar-20-regular";
 import type { ProfileSummaryModel } from "../model/profile-summary";
 import { formatPublishedDate } from "../../../shared/lib/date";
 import { AppIcon } from "../../../shared/ui/app-icon";
@@ -27,7 +28,7 @@ export function ProfileSummaryCard(props: ProfileSummaryCardProps) {
           </div>
           {props.profile.publishedAt ? (
             <p class="mt-3 inline-flex items-center gap-2 text-[11px] font-medium tracking-[0.18em] text-[var(--text-muted)]">
-              <AppIcon class="text-sm" name="calendar" />
+              <AppIcon icon={Calendar20Regular} size="xs" />
               Joined {formatPublishedDate(props.profile.publishedAt)}
             </p>
           ) : null}

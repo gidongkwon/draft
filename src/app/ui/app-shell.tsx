@@ -1,4 +1,8 @@
 import type { ParentProps } from "solid-js";
+import Alert20Regular from "~icons/fluent/alert-20-regular";
+import Home24Regular from "~icons/fluent/home-24-regular";
+import PersonArrowLeft20Regular from "~icons/fluent/person-arrow-left-20-regular";
+import PersonArrowRight20Regular from "~icons/fluent/person-arrow-right-20-regular";
 import type { ViewerSummary } from "../../shared/auth/types";
 import { AppIcon } from "../../shared/ui/app-icon";
 import { Dropdown } from "../../shared/ui/dropdown";
@@ -6,8 +10,13 @@ import { Avatar } from "../../shared/ui/avatar";
 import { Logo } from "../../shared/ui/logo";
 
 const navigation = [
-  { href: "/", label: "Timeline", icon: "home" },
-  { href: "/notifications", label: "Notifications", icon: "notification" },
+  { href: "/", label: "Timeline", icon: Home24Regular, iconName: "home" },
+  {
+    href: "/notifications",
+    label: "Notifications",
+    icon: Alert20Regular,
+    iconName: "notification",
+  },
 ] as const;
 
 type AppShellProps = ParentProps<{
@@ -42,7 +51,7 @@ export function AppShell(props: AppShellProps) {
                 </Dropdown.Trigger>
                 <Dropdown.Content>
                   <Dropdown.Item onSelect={() => props.onSignOut?.()}>
-                    <AppIcon class="text-lg" name="signOut" />
+                    <AppIcon icon={PersonArrowRight20Regular} size="lg" />
                     Log out
                   </Dropdown.Item>
                 </Dropdown.Content>
@@ -53,7 +62,7 @@ export function AppShell(props: AppShellProps) {
                 type="button"
                 onClick={() => props.onSignInClick?.()}
               >
-                <AppIcon class="text-lg" name="signIn" />
+                <AppIcon icon={PersonArrowLeft20Regular} size="lg" />
                 Sign in
               </button>
             )}
@@ -63,7 +72,7 @@ export function AppShell(props: AppShellProps) {
                   class="focus-ring inline-flex items-center gap-2 rounded-lg border border-transparent hover:bg-surface-muted px-4 py-2 font-medium text-[var(--text-secondary)] transition hover:border-[var(--border-subtle)] hover:text-[var(--text-primary)]"
                   href={item.href}
                 >
-                  <AppIcon name={item.icon} />
+                  <AppIcon icon={item.icon} />
                   {item.label}
                 </a>
               ))}

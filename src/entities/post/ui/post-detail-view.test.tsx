@@ -66,8 +66,6 @@ describe("PostDetailView", () => {
     expect(screen.getByRole("link", { name: "Open original post" }).getAttribute("href")).toBe(
       "https://example.com/posts/post-1",
     );
-    expect(document.querySelector('[data-app-icon="open"]')).toBeTruthy();
-    expect(document.querySelector('[data-app-icon="author"]')).toBeTruthy();
   });
 
   it("renders a note detail without the oversized article headline", () => {

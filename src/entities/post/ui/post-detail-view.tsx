@@ -1,3 +1,8 @@
+import ArrowSquareUpRight20Regular from "~icons/fluent/arrow-square-up-right-20-regular";
+import Comment20Regular from "~icons/fluent/comment-20-regular";
+import Heart20Regular from "~icons/fluent/heart-20-regular";
+import PersonCircle20Regular from "~icons/fluent/person-circle-20-regular";
+import Share20Regular from "~icons/fluent/share-20-regular";
 import type { PostDetailModel } from "../model/post-detail";
 import { formatPublishedDate } from "../../../shared/lib/date";
 import { AppIcon } from "../../../shared/ui/app-icon";
@@ -50,7 +55,7 @@ export function PostDetailView(props: PostDetailViewProps) {
         <section class="shell-surface rounded-[1.5rem] px-5 py-5">
           <h2 class="text-[11px] font-semibold tracking-[0.22em] text-[var(--text-muted)]">
             <span class="inline-flex items-center gap-2">
-              <AppIcon class="text-sm" name="author" />
+              <AppIcon icon={PersonCircle20Regular} size="xs" />
               Author
             </span>
           </h2>
@@ -82,19 +87,19 @@ export function PostDetailView(props: PostDetailViewProps) {
           </h2>
           <ul aria-label="Engagement" class="mt-4 grid gap-3 text-sm text-[var(--text-secondary)]">
             <li class="inline-flex items-center gap-2">
-              <AppIcon class="text-base" name="reaction" />
+              <AppIcon icon={Heart20Regular} size="sm" />
               {props.post.stats.reactions} reactions
             </li>
             <li class="inline-flex items-center gap-2">
-              <AppIcon class="text-base" name="reply" />
+              <AppIcon icon={Comment20Regular} size="sm" />
               {props.post.stats.replies} replies
             </li>
             <li class="inline-flex items-center gap-2">
-              <AppIcon class="text-base" name="share" />
+              <AppIcon icon={Share20Regular} size="sm" />
               {props.post.stats.shares} shares
             </li>
             <li class="inline-flex items-center gap-2">
-              <AppIcon class="text-base" name="reply" />
+              <AppIcon icon={Comment20Regular} size="sm" />
               {props.post.stats.quotes ?? 0} quotes
             </li>
           </ul>
@@ -103,7 +108,7 @@ export function PostDetailView(props: PostDetailViewProps) {
               class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-strong)]"
               href={props.post.canonicalUrl}
             >
-              <AppIcon class="text-base" name="open" />
+              <AppIcon icon={ArrowSquareUpRight20Regular} size="sm" />
               Open original post
             </a>
           ) : null}

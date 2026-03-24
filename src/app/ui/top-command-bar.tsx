@@ -1,4 +1,6 @@
 import type { JSX } from "solid-js";
+import Search20Regular from "~icons/fluent/search-20-regular";
+import Add24Filled from "~icons/fluent/add-24-filled";
 import { AppIcon } from "../../shared/ui/app-icon";
 import { Logo } from "../../shared/ui/logo";
 
@@ -23,7 +25,8 @@ export function TopCommandBar(props: TopCommandBarProps) {
             </label>
             <AppIcon
               class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[var(--text-muted)]"
-              name="search"
+              icon={Search20Regular}
+              size="lg"
             />
             <input
               id="global-search"
@@ -37,7 +40,7 @@ export function TopCommandBar(props: TopCommandBarProps) {
             type="button"
             onClick={() => props.onNewPost?.()}
           >
-            <AppIcon class="text-lg" name="compose" />
+            <AppIcon icon={Add24Filled} size="lg" />
             New post
           </button>
         </div>
