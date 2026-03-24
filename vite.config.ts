@@ -23,6 +23,9 @@ export default defineConfig({
   staged: {
     "*": ["sh -lc 'vp check --fix'"],
   },
+  preview: {
+    allowedHosts: ["draft.gidong.dev"],
+  },
   lint: {
     ignorePatterns: ["**/*.graphql.ts"],
     options: {
