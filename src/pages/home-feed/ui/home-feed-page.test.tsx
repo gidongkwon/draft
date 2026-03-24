@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@solidjs/testing-library";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
 import { HomeFeedFeed } from "./home-feed-page";
+import type { homeFeedQuery } from "./__generated__/homeFeedQuery.graphql";
 
 const { fetchPersonalTimelinePageMock, useServerFnMock } = vi.hoisted(() => ({
   fetchPersonalTimelinePageMock: vi.fn(),
@@ -34,7 +35,7 @@ function createTimelineEdge(id: string, title: string, cursor: string) {
     node: {
       __typename: "Article",
       actor: {
-        avatarUrl: null,
+        avatarUrl: `https://example.com/${id}.png`,
         handle: `@${id}`,
         rawName: `${title} Author`,
         username: id,
@@ -52,7 +53,11 @@ function createTimelineEdge(id: string, title: string, cursor: string) {
   };
 }
 
-function createHomeFeedData(edges = [createTimelineEdge("post-1", "First post", "cursor-1")]) {
+type HomeFeedData = homeFeedQuery["response"];
+
+function createHomeFeedData(
+  edges = [createTimelineEdge("post-1", "First post", "cursor-1")],
+): HomeFeedData {
   return {
     personalTimeline: {
       edges,
@@ -66,7 +71,7 @@ function createHomeFeedData(edges = [createTimelineEdge("post-1", "First post", 
 
 let intersectionObserverCallback: IntersectionObserverCallback | null = null;
 
-class MockIntersectionObserver implements IntersectionObserver {
+class MockIntersectionObserver {
   readonly root = null;
   readonly rootMargin = "";
   readonly thresholds = [];
@@ -165,10 +170,10 @@ describe("HomeFeedFeed", () => {
   });
 
   it("does not issue a duplicate page load while the next page is already loading", async () => {
-    let resolvePage: ((value: unknown) => void) | null = null;
+    let resolvePage!: (value: HomeFeedData) => void;
     fetchPersonalTimelinePageMock.mockImplementation(
       () =>
-        new Promise((resolve) => {
+        new Promise<HomeFeedData>((resolve) => {
           resolvePage = resolve;
         }),
     );
@@ -181,7 +186,7 @@ describe("HomeFeedFeed", () => {
     expect(fetchPersonalTimelinePageMock).toHaveBeenCalledTimes(1);
     expect(screen.getByText("Loading more posts...")).toBeTruthy();
 
-    resolvePage?.({
+    resolvePage({
       personalTimeline: {
         edges: [createTimelineEdge("post-2", "Second post", "cursor-2")],
         pageInfo: {

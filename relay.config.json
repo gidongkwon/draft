@@ -1,9 +1,9 @@
 {
   "$schema": "./node_modules/relay-compiler/relay-compiler-config-schema.json",
+  "codegenCommand": "vp exec relay-compiler",
   "src": "./src",
   "language": "typescript",
   "schema": "./graphql/schema.graphql",
-  "codegenCommand": "./node_modules/.bin/relay-compiler",
   "eagerEsModules": true,
   "customScalarTypes": {
     "Date": "string",

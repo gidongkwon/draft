@@ -1,38 +1,10 @@
 import { render, screen } from "@solidjs/testing-library";
 import { describe, expect, it } from "vite-plus/test";
 import { ProfilePage } from "../../../pages/profile";
+import type { profilePageQuery } from "../../../pages/profile/ui/__generated__/profilePageQuery.graphql";
 import { ProfileSummaryCard } from "./profile-summary-card";
 
-let mockProfileData: {
-  actorByHandle: {
-    handle: string;
-    rawName: string | null;
-    username: string;
-    avatarUrl: string;
-    bio: string | null;
-    published: string | null;
-    posts: {
-      edges: Array<{
-        node: {
-          id: string;
-          name: string | null;
-          excerpt: string;
-          published: string;
-          actor: {
-            handle: string;
-            rawName: string | null;
-            username: string;
-          };
-          engagementStats: {
-            reactions: number;
-            replies: number;
-            shares: number;
-          };
-        };
-      }>;
-    };
-  } | null;
-};
+let mockProfileData: profilePageQuery["response"];
 
 describe("ProfileSummaryCard", () => {
   it("renders actor identity inside the redesigned profile header", () => {
@@ -92,11 +64,13 @@ describe("ProfilePage", () => {
           edges: [
             {
               node: {
+                __typename: "Article",
                 id: "post-1",
                 name: "Relay in a custom Solid client",
                 excerpt: "A feed item excerpt",
                 published: "2026-03-23T05:00:00.000Z",
                 actor: {
+                  avatarUrl: "https://example.com/avatar.png",
                   handle: "@alice",
                   rawName: "Alice Doe",
                   username: "alice",
@@ -115,7 +89,7 @@ describe("ProfilePage", () => {
 
     render(() => <ProfilePage data={mockProfileData} />);
 
-    expect(screen.getByRole("img", { name: "Alice Doe avatar" }).getAttribute("src")).toBe(
+    expect(screen.getAllByRole("img", { name: "Alice Doe avatar" })[0]?.getAttribute("src")).toBe(
       "https://example.com/avatar.png",
     );
     expect(screen.getByRole("heading", { name: "Latest posts from Alice Doe" })).toBeTruthy();

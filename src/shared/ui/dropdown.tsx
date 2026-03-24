@@ -99,7 +99,8 @@ function Root(props: ParentProps<{ class?: string }>) {
 
 function Trigger(props: ParentProps<JSX.ButtonHTMLAttributes<HTMLButtonElement>>) {
   const context = useDropdownContext();
-  const [local, buttonProps] = splitProps(props, ["children", "class"]);
+  const [local, buttonProps] = splitProps(props, ["children", "class", "onClick"]);
+  const onClick = local.onClick as JSX.EventHandler<HTMLButtonElement, MouseEvent> | undefined;
 
   return (
     <button
@@ -110,7 +111,7 @@ function Trigger(props: ParentProps<JSX.ButtonHTMLAttributes<HTMLButtonElement>>
       type="button"
       {...buttonProps}
       onClick={(event) => {
-        buttonProps.onClick?.(event);
+        onClick?.(event);
 
         if (!event.defaultPrevented) {
           context.toggle();

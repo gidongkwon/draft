@@ -12,16 +12,16 @@ export const Route = createFileRoute("/_feed")({
 
 function FeedLayoutRoute() {
   const search = Route.useSearch();
-  const navigate = useNavigate({ from: "/_feed" });
+  const navigate = useNavigate({ from: "/" });
 
   return (
     <HomeFeedLayout
       onTimelineChange={(timeline: HomeFeedTimeline) =>
         navigate({
-          search: (previous) => ({
-            ...previous,
+          to: "/",
+          search: {
             timeline,
-          }),
+          },
         })
       }
       timeline={search().timeline}

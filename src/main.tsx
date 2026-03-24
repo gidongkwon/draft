@@ -3,6 +3,6 @@ import "solid-devtools";
 import { StartClient, hydrateStart } from "@tanstack/solid-start/client";
 import "./styles.css";
 
-hydrateStart().then((router) => {
+void hydrateStart().then((router) => {
   hydrate(() => <StartClient router={router} />, document);
 });

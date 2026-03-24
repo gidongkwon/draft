@@ -1,8 +1,8 @@
 /**
- * @generated SignedSource<<92a4bc6d1a885a588bb6929da4252b52>>
+ * @generated SignedSource<<cfe9dec05ea72298bf4030a78ed0f097>>
  * @lightSyntaxTransform
  * @nogrep
- * @codegen-command: ./node_modules/.bin/relay-compiler
+ * @codegen-command: vp exec relay-compiler
  */
 
 /* tslint:disable */

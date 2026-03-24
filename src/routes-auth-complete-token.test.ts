@@ -10,7 +10,6 @@ describe("auth completion route", () => {
     const completeSignInMock = vi.mocked(completeSignIn);
     completeSignInMock.mockResolvedValue({
       ok: true,
-      viewer: null,
     });
 
     const { handleAuthCompleteRequest } = await import("./routes/auth.complete.$token");

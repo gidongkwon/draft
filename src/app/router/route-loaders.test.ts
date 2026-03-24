@@ -12,10 +12,12 @@ vi.mock("../../shared/api/server-queries", () => ({
 
 function createLoaderContext({
   context = { viewer: null },
+  deps,
   params = {},
   search = {},
 }: {
   context?: { viewer: { id: string } | null };
+  deps?: Record<string, unknown>;
   params?: Record<string, string>;
   search?: Record<string, unknown>;
 }) {
@@ -23,7 +25,10 @@ function createLoaderContext({
     abortController: new AbortController(),
     cause: "enter",
     context,
-    deps: {},
+    deps: {
+      timeline: search.timeline,
+      ...deps,
+    },
     location: {} as never,
     matches: [],
     navigate: vi.fn(),
@@ -33,6 +38,16 @@ function createLoaderContext({
     route: {} as never,
     search,
   } as any;
+}
+
+function expectLoader<TLoader>(loader: TLoader): Extract<TLoader, (...args: any[]) => any> {
+  expect(loader).toBeTypeOf("function");
+
+  if (typeof loader !== "function") {
+    throw new Error("Expected route loader to be a function.");
+  }
+
+  return loader as Extract<TLoader, (...args: any[]) => any>;
 }
 
 describe("route loaders", () => {
@@ -47,10 +62,9 @@ describe("route loaders", () => {
     const feed = { timeline: "personal", data: { personalTimeline: { edges: [] } } };
     fetchHomeFeedMock.mockResolvedValue(feed);
     const { Route } = await import("../../routes/_feed.index");
+    const loader = expectLoader(Route.options.loader);
 
-    expect(Route.options.loader).toBeTypeOf("function");
-
-    const result = await Route.options.loader?.(
+    const result = await loader(
       createLoaderContext({
         context: { viewer: { id: "viewer-1" } },
         search: { timeline: "personal" },
@@ -65,8 +79,9 @@ describe("route loaders", () => {
 
   it("does not fetch the personal timeline when the viewer is signed out", async () => {
     const { Route } = await import("../../routes/_feed.index");
+    const loader = expectLoader(Route.options.loader);
 
-    const result = await Route.options.loader?.(
+    const result = await loader(
       createLoaderContext({
         search: { timeline: "personal" },
       }),
@@ -82,12 +97,11 @@ describe("route loaders", () => {
   it("surfaces home timeline failures to the feed route error boundary", async () => {
     fetchHomeFeedMock.mockRejectedValue(new Error("GraphQL request failed (503)"));
     const { Route } = await import("../../routes/_feed.index");
-
-    expect(Route.options.loader).toBeTypeOf("function");
+    const loader = expectLoader(Route.options.loader);
     expect(Route.options.errorComponent).toBeTypeOf("function");
 
     await expect(
-      Route.options.loader?.(
+      loader(
         createLoaderContext({
           context: { viewer: { id: "viewer-1" } },
         }),
@@ -100,10 +114,9 @@ describe("route loaders", () => {
     const post = { node: null };
     fetchPostDetailMock.mockResolvedValue(post);
     const { Route } = await import("../../routes/posts.$postId");
+    const loader = expectLoader(Route.options.loader);
 
-    expect(Route.options.loader).toBeTypeOf("function");
-
-    const result = await Route.options.loader?.(
+    const result = await loader(
       createLoaderContext({
         params: { postId: "post-123" },
       }),
@@ -117,10 +130,9 @@ describe("route loaders", () => {
     const profile = { actorByHandle: null };
     fetchProfileMock.mockResolvedValue(profile);
     const { Route } = await import("../../routes/profiles.$handle");
+    const loader = expectLoader(Route.options.loader);
 
-    expect(Route.options.loader).toBeTypeOf("function");
-
-    const result = await Route.options.loader?.(
+    const result = await loader(
       createLoaderContext({
         params: { handle: "@lucid" },
       }),

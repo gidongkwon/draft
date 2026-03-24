@@ -1,6 +1,6 @@
 import { Match, Switch } from "solid-js";
 import { graphql } from "relay-runtime";
-import { PostDetailView } from "../../../entities/post";
+import { PostDetailView, type PostDetailModel } from "../../../entities/post";
 import type { postDetailPageQuery } from "./__generated__/postDetailPageQuery.graphql";
 
 export const postDetailPageDocument = graphql`
@@ -39,7 +39,7 @@ type PostDetailPageProps = {
 export function PostDetailPage(props: PostDetailPageProps) {
   const data = () => props.data;
 
-  const post = () => {
+  const post = (): PostDetailModel | null => {
     const node = data()?.node;
 
     if (!node || (node.__typename !== "Note" && node.__typename !== "Article")) {

@@ -1,4 +1,4 @@
-import type { RequestParameters, Variables } from "relay-runtime";
+import type { GraphQLResponse, RequestParameters, Variables } from "relay-runtime";
 
 type CreateGraphQLFetchOptions = {
   apiUrl: string;
@@ -11,7 +11,7 @@ type GraphQLRequest = {
 };
 
 export function createGraphQLFetch(options: CreateGraphQLFetchOptions) {
-  return async ({ text, variables }: GraphQLRequest) => {
+  return async ({ text, variables }: GraphQLRequest): Promise<GraphQLResponse> => {
     if (!text) {
       throw new Error("Operation document must be provided");
     }
@@ -31,10 +31,10 @@ export function createGraphQLFetch(options: CreateGraphQLFetchOptions) {
       headers,
       body: JSON.stringify({ query: text, variables }),
     });
-    let result: { errors?: Array<{ message?: string }> } | undefined;
+    let result: GraphQLResponse;
 
     try {
-      result = await response.json();
+      result = (await response.json()) as GraphQLResponse;
     } catch (error) {
       if (!response.ok) {
         throw new Error(`GraphQL request failed (${response.status})`);
@@ -44,9 +44,10 @@ export function createGraphQLFetch(options: CreateGraphQLFetchOptions) {
     }
 
     if (!response.ok) {
-      throw new Error(
-        result?.errors?.[0]?.message ?? `GraphQL request failed (${response.status})`,
-      );
+      const message =
+        "errors" in result && Array.isArray(result.errors) ? result.errors[0]?.message : undefined;
+
+      throw new Error(message ?? `GraphQL request failed (${response.status})`);
     }
 
     return result;

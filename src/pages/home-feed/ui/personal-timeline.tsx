@@ -36,8 +36,8 @@ function mapTimelineEdgeToPost(edge: PersonalTimelineEdge): PostCardModel {
 }
 
 function mergeTimelineEdges(
-  currentEdges: PersonalTimelineEdge[],
-  nextEdges: PersonalTimelineEdge[],
+  currentEdges: readonly PersonalTimelineEdge[],
+  nextEdges: readonly PersonalTimelineEdge[],
 ): PersonalTimelineEdge[] {
   const seenIds = new Set(currentEdges.map((edge) => edge.node.id));
   const mergedEdges = [...currentEdges];
@@ -56,8 +56,10 @@ function mergeTimelineEdges(
 
 export function PersonalTimeline(props: PersonalTimelineProps) {
   const fetchPersonalTimelinePageFn = useServerFn(fetchPersonalTimelinePage);
-  const [edges, setEdges] = createSignal(props.connection.edges);
-  const [endCursor, setEndCursor] = createSignal(props.connection.pageInfo.endCursor);
+  const [edges, setEdges] = createSignal<readonly PersonalTimelineEdge[]>(props.connection.edges);
+  const [endCursor, setEndCursor] = createSignal<string | null>(
+    props.connection.pageInfo.endCursor ?? null,
+  );
   const [hasNextPage, setHasNextPage] = createSignal(props.connection.pageInfo.hasNextPage);
   const [isLoadingNextPage, setIsLoadingNextPage] = createSignal(false);
   const [loadError, setLoadError] = createSignal<string | null>(null);
@@ -87,7 +89,7 @@ export function PersonalTimeline(props: PersonalTimelineProps) {
       }
 
       setEdges((currentEdges) => mergeTimelineEdges(currentEdges, nextConnection.edges));
-      setEndCursor(nextConnection.pageInfo.endCursor);
+      setEndCursor(nextConnection.pageInfo.endCursor ?? null);
       setHasNextPage(nextConnection.pageInfo.hasNextPage);
     } catch {
       setLoadError("Could not load more posts.");

@@ -13,7 +13,10 @@ export function HomeFeedLayout(props: HomeFeedLayoutProps) {
     <section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_18rem]">
       <div class="min-w-0 space-y-5">
         <ComposeStrip />
-        <Tabs.Root onValueChange={props.onTimelineChange} value={props.timeline}>
+        <Tabs.Root
+          onValueChange={(value) => props.onTimelineChange(value as HomeFeedTimeline)}
+          value={props.timeline}
+        >
           <Tabs.List aria-label="Timeline type">
             <Tabs.Trigger value="personal">Personal</Tabs.Trigger>
             <Tabs.Trigger value="public">Public</Tabs.Trigger>

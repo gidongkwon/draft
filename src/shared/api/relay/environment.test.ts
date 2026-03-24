@@ -24,7 +24,11 @@ describe("createEnvironment", () => {
       }),
     );
 
-    const options = createGraphQLFetchMock.mock.calls.at(-1)?.[0];
-    expect(options?.getSessionToken?.()).toBe("server-session");
+    const lastCall = createGraphQLFetchMock.mock.calls.at(-1) as
+      | [{ getSessionToken: () => string | null | undefined }]
+      | undefined;
+
+    expect(lastCall).toBeTruthy();
+    expect(lastCall?.[0]?.getSessionToken()).toBe("server-session");
   });
 });

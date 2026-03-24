@@ -10,6 +10,14 @@ import { profilePageDocument } from "../../pages/profile";
 import { getRelayEnvironment } from "./relay";
 import { fetchRelayQuery } from "./relay/runtime";
 
+function requireQueryResult<T>(result: T | undefined, message: string): T {
+  if (result === undefined) {
+    throw new Error(message);
+  }
+
+  return result;
+}
+
 export async function readHomeFeedWithEnvironment(
   environment: IEnvironment,
   timeline: HomeFeedTimeline,
@@ -29,23 +37,29 @@ export async function readPersonalTimelinePageWithEnvironment(
   environment: IEnvironment,
   after: string | null,
 ) {
-  return await fetchRelayQuery<homeFeedQuery>(environment, homeFeedQueryDocument, {
+  const result = await fetchRelayQuery<homeFeedQuery>(environment, homeFeedQueryDocument, {
     after,
     first: 20,
   }).toPromise();
+
+  return requireQueryResult(result, "Could not load the personal timeline.");
 }
 
 export async function readPostDetailWithEnvironment(environment: IEnvironment, postId: string) {
-  return await fetchRelayQuery<postDetailPageQuery>(environment, postDetailPageDocument, {
+  const result = await fetchRelayQuery<postDetailPageQuery>(environment, postDetailPageDocument, {
     id: postId,
   }).toPromise();
+
+  return requireQueryResult(result, "Could not load the requested post.");
 }
 
 export async function readProfileWithEnvironment(environment: IEnvironment, handle: string) {
-  return await fetchRelayQuery<profilePageQuery>(environment, profilePageDocument, {
+  const result = await fetchRelayQuery<profilePageQuery>(environment, profilePageDocument, {
     handle,
     first: 20,
   }).toPromise();
+
+  return requireQueryResult(result, "Could not load the requested profile.");
 }
 
 export const fetchHomeFeed = createServerFn({

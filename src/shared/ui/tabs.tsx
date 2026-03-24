@@ -44,6 +44,7 @@ function Root(props: ParentProps<{ onValueChange: (value: string) => void; value
 
 function List(props: ParentProps<JSX.HTMLAttributes<HTMLDivElement>>) {
   const [local, others] = splitProps(props, ["children", "class", "onKeyDown"]);
+  const onKeyDown = local.onKeyDown as JSX.EventHandler<HTMLDivElement, KeyboardEvent> | undefined;
 
   return (
     <div
@@ -54,7 +55,7 @@ function List(props: ParentProps<JSX.HTMLAttributes<HTMLDivElement>>) {
       role="tablist"
       {...others}
       onKeyDown={(event) => {
-        local.onKeyDown?.(event);
+        onKeyDown?.(event);
 
         if (event.defaultPrevented) {
           return;
@@ -112,6 +113,7 @@ function Trigger(props: TriggerProps) {
     "onClick",
     "value",
   ]);
+  const onClick = local.onClick as JSX.EventHandler<HTMLButtonElement, MouseEvent> | undefined;
 
   const isSelected = () => context.value() === local.value;
   const tabId = () => `${context.baseId}-${local.value}-tab`;
@@ -131,7 +133,7 @@ function Trigger(props: TriggerProps) {
       type="button"
       {...buttonProps}
       onClick={(event) => {
-        local.onClick?.(event);
+        onClick?.(event);
 
         if (event.defaultPrevented || local.disabled) {
           return;

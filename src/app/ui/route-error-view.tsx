@@ -1,6 +1,6 @@
-import type { ErrorComponentProps } from "@tanstack/solid-router";
-
-type RouteErrorViewProps = Pick<ErrorComponentProps, "error">;
+type RouteErrorViewProps = {
+  error: unknown;
+};
 
 export function RouteErrorView(props: RouteErrorViewProps) {
   const message =

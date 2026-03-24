@@ -4,8 +4,11 @@ import { parseHomeFeedSearch } from "../pages/home-feed/model/timeline-search";
 import { fetchHomeFeed } from "../shared/api/server-queries";
 
 export const Route = createFileRoute("/_feed/")({
-  loader: ({ context, search }) => {
-    const timeline = parseHomeFeedSearch(search).timeline;
+  loaderDeps: ({ search }) => ({
+    timeline: parseHomeFeedSearch(search).timeline,
+  }),
+  loader: ({ context, deps }) => {
+    const { timeline } = deps;
 
     if (timeline === "personal" && !context.viewer) {
       return {

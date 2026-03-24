@@ -42,7 +42,7 @@ type AppIconProps = {
   class?: string;
   label?: string;
   name: AppIconName;
-  testName?: AppIconName;
+  testName?: string;
 };
 
 export function AppIcon(props: AppIconProps) {

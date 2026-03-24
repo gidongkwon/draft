@@ -1,9 +1,9 @@
 import type { IEnvironment } from "relay-runtime";
 import type { operationsCompleteLoginChallengeMutation as CompleteLoginChallengeMutation } from "./__generated__/operationsCompleteLoginChallengeMutation.graphql";
-import type { currentViewerQuery as CurrentViewerQuery } from "./__generated__/currentViewerQuery.graphql";
 import type { operationsLoginByEmailMutation as LoginByEmailMutation } from "./__generated__/operationsLoginByEmailMutation.graphql";
 import type { operationsLoginByUsernameMutation as LoginByUsernameMutation } from "./__generated__/operationsLoginByUsernameMutation.graphql";
 import type { operationsRevokeSessionMutation as RevokeSessionMutation } from "./__generated__/operationsRevokeSessionMutation.graphql";
+import type { viewerQuery as ViewerQuery } from "./__generated__/viewerQuery.graphql";
 import {
   completeLoginChallengeMutation,
   loginByEmailMutation,
@@ -11,6 +11,7 @@ import {
   revokeSessionMutation,
 } from "./operations";
 import { commitRelayMutation, fetchRelayQuery } from "../api/relay/runtime";
+import type { ViewerSummary } from "./types";
 import { toViewerSummary, viewerQuery } from "./viewer-query";
 
 export type ChallengeInput = {
@@ -91,26 +92,48 @@ export async function requestSignInChallengeWithEnvironment(
   input: ChallengeInput,
 ): Promise<ChallengeResult> {
   const identifier = input.identifier.trim();
-  const useEmailMutation = isEmailIdentifier(identifier);
-  const result = useEmailMutation
-    ? await commitMutationPromise<LoginByEmailMutation["response"]>(environment, {
-        mutation: loginByEmailMutation,
-        variables: {
-          email: identifier,
-          locale: input.locale,
-          verifyUrl: input.verifyUrl,
-        },
-      })
-    : await commitMutationPromise<LoginByUsernameMutation["response"]>(environment, {
-        mutation: loginByUsernameMutation,
-        variables: {
-          locale: input.locale,
-          username: identifier,
-          verifyUrl: input.verifyUrl,
-        },
-      });
+  if (isEmailIdentifier(identifier)) {
+    const result = await commitMutationPromise<LoginByEmailMutation["response"]>(environment, {
+      mutation: loginByEmailMutation,
+      variables: {
+        email: identifier,
+        locale: input.locale,
+        verifyUrl: input.verifyUrl,
+      },
+    });
 
-  const payload = useEmailMutation ? result.loginByEmail : result.loginByUsername;
+    const payload = result.loginByEmail;
+
+    if (payload?.__typename === "LoginChallenge" && payload.token) {
+      return {
+        ok: true,
+        token: payload.token,
+      };
+    }
+
+    if (payload?.__typename === "AccountNotFoundError") {
+      return {
+        ok: false,
+        reason: "account-not-found",
+      };
+    }
+
+    return {
+      ok: false,
+      reason: "unknown",
+    };
+  }
+
+  const result = await commitMutationPromise<LoginByUsernameMutation["response"]>(environment, {
+    mutation: loginByUsernameMutation,
+    variables: {
+      locale: input.locale,
+      username: identifier,
+      verifyUrl: input.verifyUrl,
+    },
+  });
+
+  const payload = result.loginByUsername;
 
   if (payload?.__typename === "LoginChallenge" && payload.token) {
     return {
@@ -192,11 +215,7 @@ export async function readCurrentViewerWithEnvironment(
     };
   }
 
-  const result = await fetchRelayQuery<CurrentViewerQuery>(
-    environment,
-    viewerQuery,
-    {},
-  ).toPromise();
+  const result = await fetchRelayQuery<ViewerQuery>(environment, viewerQuery, {}).toPromise();
   const viewer = result?.viewer;
 
   return {

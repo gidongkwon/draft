@@ -1,5 +1,6 @@
 import { Match, Switch } from "solid-js";
 import { graphql } from "relay-runtime";
+import type { PostCardModel } from "../../../entities/post";
 import { ProfileSummaryCard } from "../../../entities/profile";
 import { FeedList } from "../../../widgets/feed-list";
 import { stripHtmlTags } from "../../../shared/lib/html";
@@ -64,7 +65,7 @@ export function ProfilePage(props: ProfilePageProps) {
     };
   };
 
-  const posts = () =>
+  const posts = (): PostCardModel[] =>
     data()?.actorByHandle?.posts.edges.map(({ node }) => ({
       id: node.id,
       kind: node.__typename === "Article" || (node.name ?? "").trim() !== "" ? "article" : "note",
