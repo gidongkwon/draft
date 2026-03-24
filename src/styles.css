@@ -75,6 +75,10 @@
     border-top: 1px solid var(--border-subtle);
   }
 
+  .feed-divider > [data-thread-grouped="true"] + [data-thread-grouped="true"] {
+    border-top-color: transparent;
+  }
+
   .focus-ring:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);

@@ -1,13 +1,12 @@
 import { Match, Switch } from "solid-js";
 import { useAuthTrigger } from "../../../features/auth/ui/auth-trigger-context";
 import type { HomeFeedTimeline } from "../model/timeline-search";
-import { PersonalTimeline } from "./personal-timeline";
+import { HomeTimeline } from "./home-timeline";
 import type { homeFeedQuery } from "./__generated__/homeFeedQuery.graphql";
 
 type HomeFeedFeedProps = {
   data: homeFeedQuery["response"] | null;
   timeline: HomeFeedTimeline;
-  unavailableReason?: string;
 };
 
 export function HomeFeedFeed(props: HomeFeedFeedProps) {
@@ -15,13 +14,11 @@ export function HomeFeedFeed(props: HomeFeedFeedProps) {
 
   return (
     <Switch>
-      <Match when={props.timeline === "public"}>
-        <section class="shell-surface rounded-[1.5rem] px-6 py-12 text-center text-sm text-[var(--text-secondary)]">
-          {props.unavailableReason ?? "Public timeline is temporarily unavailable."}
-        </section>
+      <Match when={props.timeline === "personal" ? props.data?.personalTimeline : null}>
+        {(connection) => <HomeTimeline connection={connection()} timeline="personal" />}
       </Match>
-      <Match when={props.data}>
-        {(data) => <PersonalTimeline connection={data().personalTimeline} />}
+      <Match when={props.timeline !== "personal" ? props.data?.publicTimeline : null}>
+        {(connection) => <HomeTimeline connection={connection()} timeline={props.timeline} />}
       </Match>
       <Match when={props.timeline === "personal"}>
         <section class="shell-surface rounded-[1.5rem] px-6 py-12 text-center">

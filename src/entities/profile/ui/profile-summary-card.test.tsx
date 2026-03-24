@@ -68,6 +68,10 @@ describe("ProfilePage", () => {
                 name: "Relay in a custom Solid client",
                 excerpt: "A feed item excerpt",
                 published: "2026-03-23T05:00:00.000Z",
+                reactionGroups: [
+                  { emoji: "🔥", reactors: { totalCount: 4 } },
+                  { emoji: "👏", reactors: { totalCount: 3 } },
+                ],
                 actor: {
                   avatarUrl: "https://example.com/avatar.png",
                   handle: "@alice",
@@ -93,6 +97,7 @@ describe("ProfilePage", () => {
     );
     expect(screen.getByRole("heading", { name: "Latest posts from Alice Doe" })).toBeTruthy();
     expect(screen.getByRole("feed", { name: "Public timeline" })).toBeTruthy();
+    expect(screen.getByText("🔥")).toBeTruthy();
     expect(screen.getByText("Profile view")).toBeTruthy();
   });
 });

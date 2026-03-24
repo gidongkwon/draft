@@ -7,4 +7,10 @@ describe("parseHomeFeedSearch", () => {
       timeline: "personal",
     });
   });
+
+  it("accepts the Hackers' Pub local timeline value", () => {
+    expect(parseHomeFeedSearch({ timeline: "hackersPub" })).toEqual({
+      timeline: "hackersPub",
+    });
+  });
 });

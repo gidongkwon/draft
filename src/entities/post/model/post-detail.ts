@@ -1,3 +1,5 @@
+import type { ReactionGroupModel } from "./reaction-group";
+
 export type PostDetailModel = {
   id: string;
   kind: "note" | "article";
@@ -19,4 +21,5 @@ export type PostDetailModel = {
     shares: number;
     quotes?: number;
   };
+  reactionGroups: ReactionGroupModel[];
 };

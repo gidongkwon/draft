@@ -25,6 +25,49 @@ describe("relay-backed server queries", () => {
     expect(fetchQueryMock).toHaveBeenCalledWith(relayEnvironment, expect.anything(), {
       after: null,
       first: 20,
+      isPersonal: true,
+      isPublic: false,
+      local: false,
+    });
+    expect(result).toEqual(expected);
+  });
+
+  it("loads the public home timeline through relay query documents", async () => {
+    const relayEnvironment = {} as IEnvironment;
+    const expected = { publicTimeline: { edges: [] } };
+    fetchQueryMock.mockReturnValue({
+      toPromise: vi.fn().mockResolvedValue(expected),
+    });
+    const { readHomeFeedWithEnvironment } = await import("./server-queries");
+
+    const result = await readHomeFeedWithEnvironment(relayEnvironment, "public");
+
+    expect(fetchQueryMock).toHaveBeenCalledWith(relayEnvironment, expect.anything(), {
+      after: null,
+      first: 20,
+      isPersonal: false,
+      isPublic: true,
+      local: false,
+    });
+    expect(result).toEqual(expected);
+  });
+
+  it("loads the Hackers' Pub local timeline through relay query documents", async () => {
+    const relayEnvironment = {} as IEnvironment;
+    const expected = { publicTimeline: { edges: [] } };
+    fetchQueryMock.mockReturnValue({
+      toPromise: vi.fn().mockResolvedValue(expected),
+    });
+    const { readHomeFeedWithEnvironment } = await import("./server-queries");
+
+    const result = await readHomeFeedWithEnvironment(relayEnvironment, "hackersPub");
+
+    expect(fetchQueryMock).toHaveBeenCalledWith(relayEnvironment, expect.anything(), {
+      after: null,
+      first: 20,
+      isPersonal: false,
+      isPublic: true,
+      local: true,
     });
     expect(result).toEqual(expected);
   });
@@ -42,20 +85,55 @@ describe("relay-backed server queries", () => {
     expect(fetchQueryMock).toHaveBeenCalledWith(relayEnvironment, expect.anything(), {
       after: "cursor-20",
       first: 20,
+      isPersonal: true,
+      isPublic: false,
+      local: false,
     });
     expect(result).toEqual(expected);
   });
 
-  it("does not query relay for the out-of-service public timeline", async () => {
+  it("loads additional public timeline pages through relay query documents", async () => {
     const relayEnvironment = {} as IEnvironment;
-    const { readHomeFeedWithEnvironment } = await import("./server-queries");
-
-    const result = await readHomeFeedWithEnvironment(relayEnvironment, "public");
-
-    expect(fetchQueryMock).not.toHaveBeenCalled();
-    expect(result).toEqual({
-      unavailableReason: "Public timeline is temporarily unavailable.",
+    const expected = { publicTimeline: { edges: [] } };
+    fetchQueryMock.mockReturnValue({
+      toPromise: vi.fn().mockResolvedValue(expected),
     });
+    const { readPublicTimelinePageWithEnvironment } = await import("./server-queries");
+
+    const result = await readPublicTimelinePageWithEnvironment(
+      relayEnvironment,
+      "cursor-20",
+      false,
+    );
+
+    expect(fetchQueryMock).toHaveBeenCalledWith(relayEnvironment, expect.anything(), {
+      after: "cursor-20",
+      first: 20,
+      isPersonal: false,
+      isPublic: true,
+      local: false,
+    });
+    expect(result).toEqual(expected);
+  });
+
+  it("loads additional Hackers' Pub local timeline pages through relay query documents", async () => {
+    const relayEnvironment = {} as IEnvironment;
+    const expected = { publicTimeline: { edges: [] } };
+    fetchQueryMock.mockReturnValue({
+      toPromise: vi.fn().mockResolvedValue(expected),
+    });
+    const { readPublicTimelinePageWithEnvironment } = await import("./server-queries");
+
+    const result = await readPublicTimelinePageWithEnvironment(relayEnvironment, "cursor-20", true);
+
+    expect(fetchQueryMock).toHaveBeenCalledWith(relayEnvironment, expect.anything(), {
+      after: "cursor-20",
+      first: 20,
+      isPersonal: false,
+      isPublic: true,
+      local: true,
+    });
+    expect(result).toEqual(expected);
   });
 
   it("loads the post detail through relay query documents", async () => {

@@ -94,6 +94,42 @@ describe("route loaders", () => {
     });
   });
 
+  it("loads the public timeline when the viewer is signed out", async () => {
+    const feed = { timeline: "public", data: { publicTimeline: { edges: [] } } };
+    fetchHomeFeedMock.mockResolvedValue(feed);
+    const { Route } = await import("../../routes/_feed.index");
+    const loader = expectLoader(Route.options.loader);
+
+    const result = await loader(
+      createLoaderContext({
+        search: { timeline: "public" },
+      }),
+    );
+
+    expect(fetchHomeFeedMock).toHaveBeenCalledWith({
+      data: { timeline: "public" },
+    });
+    expect(result).toEqual(feed);
+  });
+
+  it("loads the Hackers' Pub local timeline when the viewer is signed out", async () => {
+    const feed = { timeline: "hackersPub", data: { publicTimeline: { edges: [] } } };
+    fetchHomeFeedMock.mockResolvedValue(feed);
+    const { Route } = await import("../../routes/_feed.index");
+    const loader = expectLoader(Route.options.loader);
+
+    const result = await loader(
+      createLoaderContext({
+        search: { timeline: "hackersPub" },
+      }),
+    );
+
+    expect(fetchHomeFeedMock).toHaveBeenCalledWith({
+      data: { timeline: "hackersPub" },
+    });
+    expect(result).toEqual(feed);
+  });
+
   it("surfaces home timeline failures to the feed route error boundary", async () => {
     fetchHomeFeedMock.mockRejectedValue(new Error("GraphQL request failed (503)"));
     const { Route } = await import("../../routes/_feed.index");

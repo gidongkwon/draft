@@ -20,6 +20,7 @@ export function HomeFeedLayout(props: HomeFeedLayoutProps) {
           <Tabs.List aria-label="Timeline type">
             <Tabs.Trigger value="personal">Personal</Tabs.Trigger>
             <Tabs.Trigger value="public">Public</Tabs.Trigger>
+            <Tabs.Trigger value="hackersPub">Hackers' Pub</Tabs.Trigger>
           </Tabs.List>
         </Tabs.Root>
         {props.children}

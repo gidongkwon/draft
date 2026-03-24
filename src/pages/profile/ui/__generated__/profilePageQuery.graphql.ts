@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<db0cecb0076b34f591b1372804c335fb>>
+ * @generated SignedSource<<ad2395ef8170535425b7b0a927b02c74>>
  * @lightSyntaxTransform
  * @nogrep
  * @codegen-command: vp exec relay-compiler
@@ -38,6 +38,12 @@ export type profilePageQuery$data = {
           readonly id: string;
           readonly name: string | null | undefined;
           readonly published: string;
+          readonly reactionGroups: ReadonlyArray<{
+            readonly emoji?: string;
+            readonly reactors?: {
+              readonly totalCount: number;
+            };
+          }>;
         };
       }>;
     };
@@ -152,6 +158,38 @@ v13 = {
   "storageKey": null
 },
 v14 = {
+  "kind": "InlineFragment",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "emoji",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "ReactionGroupReactorsConnection",
+      "kind": "LinkedField",
+      "name": "reactors",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "totalCount",
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "type": "EmojiReactionGroup",
+  "abstractKey": null
+},
+v15 = {
   "alias": null,
   "args": null,
   "concreteType": "PostEngagementStats",
@@ -239,6 +277,18 @@ return {
                       {
                         "alias": null,
                         "args": null,
+                        "concreteType": null,
+                        "kind": "LinkedField",
+                        "name": "reactionGroups",
+                        "plural": true,
+                        "selections": [
+                          (v14/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
                         "concreteType": "Actor",
                         "kind": "LinkedField",
                         "name": "actor",
@@ -251,7 +301,7 @@ return {
                         ],
                         "storageKey": null
                       },
-                      (v14/*: any*/)
+                      (v15/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -323,6 +373,19 @@ return {
                       {
                         "alias": null,
                         "args": null,
+                        "concreteType": null,
+                        "kind": "LinkedField",
+                        "name": "reactionGroups",
+                        "plural": true,
+                        "selections": [
+                          (v10/*: any*/),
+                          (v14/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
                         "concreteType": "Actor",
                         "kind": "LinkedField",
                         "name": "actor",
@@ -336,7 +399,7 @@ return {
                         ],
                         "storageKey": null
                       },
-                      (v14/*: any*/)
+                      (v15/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -353,16 +416,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "723d300dba0ed85704178859a1e11bc1",
+    "cacheID": "29343409fbb2fce2cc0b597d948d8184",
     "id": null,
     "metadata": {},
     "name": "profilePageQuery",
     "operationKind": "query",
-    "text": "query profilePageQuery(\n  $handle: String!\n  $first: Int!\n) {\n  actorByHandle(handle: $handle, allowLocalHandle: true) {\n    handle\n    rawName\n    username\n    avatarUrl\n    bio\n    published\n    posts(first: $first) {\n      edges {\n        node {\n          __typename\n          id\n          name\n          excerpt\n          published\n          actor {\n            handle\n            rawName\n            username\n            avatarUrl\n            id\n          }\n          engagementStats {\n            reactions\n            replies\n            shares\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "query profilePageQuery(\n  $handle: String!\n  $first: Int!\n) {\n  actorByHandle(handle: $handle, allowLocalHandle: true) {\n    handle\n    rawName\n    username\n    avatarUrl\n    bio\n    published\n    posts(first: $first) {\n      edges {\n        node {\n          __typename\n          id\n          name\n          excerpt\n          published\n          reactionGroups {\n            __typename\n            ... on EmojiReactionGroup {\n              emoji\n              reactors {\n                totalCount\n              }\n            }\n          }\n          actor {\n            handle\n            rawName\n            username\n            avatarUrl\n            id\n          }\n          engagementStats {\n            reactions\n            replies\n            shares\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "a4d780d0294fd52183638789b02526f3";
+(node as any).hash = "e4c6a0329c1915d6828cc325507f8301";
 
 export default node;

@@ -1,12 +1,12 @@
 import ArrowSquareUpRight20Regular from "~icons/fluent/arrow-square-up-right-20-regular";
 import Comment20Regular from "~icons/fluent/comment-20-regular";
-import Heart20Regular from "~icons/fluent/heart-20-regular";
 import PersonCircle20Regular from "~icons/fluent/person-circle-20-regular";
 import Share20Regular from "~icons/fluent/share-20-regular";
 import type { PostDetailModel } from "../model/post-detail";
 import { formatPublishedDate } from "../../../shared/lib/date";
 import { AppIcon } from "../../../shared/ui/app-icon";
 import { Avatar } from "../../../shared/ui/avatar";
+import { ReactionBadge } from "./reaction-badge";
 
 type PostDetailViewProps = {
   post: PostDetailModel;
@@ -87,8 +87,11 @@ export function PostDetailView(props: PostDetailViewProps) {
           </h2>
           <ul aria-label="Engagement" class="mt-4 grid gap-3 text-sm text-[var(--text-secondary)]">
             <li class="inline-flex items-center gap-2">
-              <AppIcon icon={Heart20Regular} size="sm" />
-              {props.post.stats.reactions} reactions
+              <ReactionBadge
+                count={props.post.stats.reactions}
+                reactionGroups={props.post.reactionGroups}
+              />
+              reactions
             </li>
             <li class="inline-flex items-center gap-2">
               <AppIcon icon={Comment20Regular} size="sm" />

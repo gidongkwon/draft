@@ -37,6 +37,7 @@ describe("FeedList", () => {
               replies: 3,
               shares: 2,
             },
+            reactionGroups: [{ count: 8, emoji: "🔥" }],
           },
         ]}
       />

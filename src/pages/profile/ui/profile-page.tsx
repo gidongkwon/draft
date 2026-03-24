@@ -1,6 +1,6 @@
 import { Match, Switch } from "solid-js";
 import { graphql } from "relay-runtime";
-import type { PostCardModel } from "../../../entities/post";
+import type { PostCardModel, ReactionGroupModel } from "../../../entities/post";
 import { ProfileSummaryCard } from "../../../entities/profile";
 import { FeedList } from "../../../widgets/feed-list";
 import { stripHtmlTags } from "../../../shared/lib/html";
@@ -23,6 +23,14 @@ export const profilePageDocument = graphql`
             name
             excerpt
             published
+            reactionGroups {
+              ... on EmojiReactionGroup {
+                emoji
+                reactors {
+                  totalCount
+                }
+              }
+            }
             actor {
               handle
               rawName
@@ -44,6 +52,19 @@ export const profilePageDocument = graphql`
 type ProfilePageProps = {
   data: profilePageQuery["response"];
 };
+
+function mapReactionGroupsToModel(
+  reactionGroups: ReadonlyArray<{
+    readonly emoji?: string | null | undefined;
+    readonly reactors?: { readonly totalCount: number } | null | undefined;
+  }>,
+): ReactionGroupModel[] {
+  return reactionGroups.flatMap((group) =>
+    group.emoji && group.reactors?.totalCount != null
+      ? [{ count: group.reactors.totalCount, emoji: group.emoji }]
+      : [],
+  );
+}
 
 export function ProfilePage(props: ProfilePageProps) {
   const data = () => props.data;
@@ -83,6 +104,7 @@ export function ProfilePage(props: ProfilePageProps) {
         replies: node.engagementStats.replies,
         shares: node.engagementStats.shares,
       },
+      reactionGroups: mapReactionGroupsToModel(node.reactionGroups),
     })) ?? [];
 
   return (

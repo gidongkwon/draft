@@ -23,6 +23,17 @@ describe("PostPreviewCard", () => {
             replies: 3,
             shares: 2,
           },
+          reactionGroups: [
+            { count: 4, emoji: "🔥" },
+            { count: 3, emoji: "👏" },
+          ],
+          shareSummary: {
+            sharer: {
+              handle: "@bob",
+              name: "Bob Smith",
+            },
+            sharersCount: 2,
+          },
         }}
       />
     ));
@@ -37,6 +48,8 @@ describe("PostPreviewCard", () => {
       "https://example.com/avatar.png",
     );
     expect(screen.getByText("@alice")).toBeTruthy();
+    expect(screen.getByText("Shared by Bob Smith and 1 other")).toBeTruthy();
+    expect(screen.getByText("🔥")).toBeTruthy();
     expect(screen.getByText("8")).toBeTruthy();
   });
 
@@ -60,6 +73,7 @@ describe("PostPreviewCard", () => {
             replies: 1,
             shares: 0,
           },
+          reactionGroups: [{ count: 2, emoji: "🔥" }],
         }}
       />
     ));
@@ -68,5 +82,66 @@ describe("PostPreviewCard", () => {
       screen.queryByRole("heading", { name: /a note body rendered as the main content block/i }),
     ).toBeNull();
     expect(screen.getByText("A note body rendered as the main content block")).toBeTruthy();
+  });
+
+  it("exposes the thread position when the card belongs to a visible thread run", () => {
+    const { container } = render(() => (
+      <PostPreviewCard
+        post={{
+          id: "post-3",
+          kind: "note",
+          title: null,
+          excerpt: "Threaded note",
+          publishedAt: "2026-03-23T05:00:00.000Z",
+          href: "/posts/post-3",
+          author: {
+            handle: "@alice",
+            name: "Alice Doe",
+            avatarUrl: "https://example.com/avatar.png",
+          },
+          stats: {
+            reactions: 1,
+            replies: 1,
+            shares: 0,
+          },
+          reactionGroups: [{ count: 1, emoji: "🔥" }],
+        }}
+        threadPosition="middle"
+      />
+    ));
+
+    expect(container.querySelector('article[data-thread-position="middle"]')).toBeTruthy();
+    expect(container.querySelector('article[data-thread-grouped="true"]')).toBeTruthy();
+    expect(container.querySelector('[data-avatar-shell="true"]')).toBeTruthy();
+    expect(container.querySelector("[data-thread-line]")).toBeNull();
+  });
+
+  it("stops the connector at the avatar center on the last card in a thread", () => {
+    const { container } = render(() => (
+      <PostPreviewCard
+        post={{
+          id: "post-4",
+          kind: "note",
+          title: null,
+          excerpt: "Thread tail",
+          publishedAt: "2026-03-23T05:00:00.000Z",
+          href: "/posts/post-4",
+          author: {
+            handle: "@alice",
+            name: "Alice Doe",
+            avatarUrl: "https://example.com/avatar.png",
+          },
+          stats: {
+            reactions: 1,
+            replies: 1,
+            shares: 0,
+          },
+          reactionGroups: [{ count: 1, emoji: "🔥" }],
+        }}
+        threadPosition="end"
+      />
+    ));
+
+    expect(container.querySelector("[data-thread-line]")).toBeNull();
   });
 });

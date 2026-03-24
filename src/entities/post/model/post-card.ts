@@ -1,3 +1,5 @@
+import type { ReactionGroupModel } from "./reaction-group";
+
 export type PostCardModel = {
   id: string;
   kind: "note" | "article";
@@ -14,5 +16,13 @@ export type PostCardModel = {
     reactions: number;
     replies: number;
     shares: number;
+  };
+  reactionGroups: ReactionGroupModel[];
+  shareSummary?: {
+    sharer: {
+      handle: string;
+      name: string;
+    };
+    sharersCount: number;
   };
 };

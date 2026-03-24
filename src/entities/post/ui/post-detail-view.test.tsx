@@ -1,32 +1,10 @@
 import { render, screen } from "@solidjs/testing-library";
 import { describe, expect, it } from "vite-plus/test";
 import { PostDetailPage } from "../../../pages/post-detail";
+import type { postDetailPageQuery } from "../../../pages/post-detail/ui/__generated__/postDetailPageQuery.graphql";
 import { PostDetailView } from "./post-detail-view";
 
-let mockPostDetailData: {
-  node: {
-    __typename: string;
-    id: string;
-    name: string | null;
-    summary: string | null;
-    content: string;
-    published: string;
-    url: string | null;
-    actor: {
-      handle: string;
-      rawName: string | null;
-      username: string;
-      avatarUrl: string;
-      bio: string | null;
-    };
-    engagementStats: {
-      reactions: number;
-      replies: number;
-      shares: number;
-      quotes: number;
-    };
-  } | null;
-};
+let mockPostDetailData: postDetailPageQuery["response"];
 
 describe("PostDetailView", () => {
   it("renders the redesigned reading surface with author and canonical links", () => {
@@ -53,6 +31,10 @@ describe("PostDetailView", () => {
             shares: 2,
             quotes: 1,
           },
+          reactionGroups: [
+            { count: 4, emoji: "🔥" },
+            { count: 3, emoji: "👏" },
+          ],
         }}
       />
     ));
@@ -63,6 +45,7 @@ describe("PostDetailView", () => {
     );
     expect(screen.getAllByRole("img", { name: "Alice Doe avatar" })).toHaveLength(2);
     expect(screen.getByText("A summary for the redesigned detail view.")).toBeTruthy();
+    expect(screen.getByText("🔥")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Open original post" }).getAttribute("href")).toBe(
       "https://example.com/posts/post-1",
     );
@@ -92,6 +75,7 @@ describe("PostDetailView", () => {
             shares: 2,
             quotes: 1,
           },
+          reactionGroups: [{ count: 8, emoji: "🔥" }],
         }}
       />
     ));
@@ -112,6 +96,10 @@ describe("PostDetailPage", () => {
         content: "<p>Hello from the post body.</p>",
         published: "2026-03-23T05:00:00.000Z",
         url: "https://example.com/posts/post-1",
+        reactionGroups: [
+          { emoji: "🔥", reactors: { totalCount: 4 } },
+          { emoji: "👏", reactors: { totalCount: 3 } },
+        ],
         actor: {
           handle: "@alice",
           rawName: "Alice Doe",
@@ -150,6 +138,7 @@ describe("PostDetailPage", () => {
         content: "<p>Hello from the note body.</p>",
         published: "2026-03-23T05:00:00.000Z",
         url: null,
+        reactionGroups: [{ emoji: "🔥", reactors: { totalCount: 8 } }],
         actor: {
           handle: "@alice",
           rawName: "Alice Doe",

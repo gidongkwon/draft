@@ -18,19 +18,27 @@ function requireQueryResult<T>(result: T | undefined, message: string): T {
   return result;
 }
 
+function getHomeFeedQueryVariables(timeline: HomeFeedTimeline, after: string | null) {
+  return {
+    after,
+    first: 20,
+    isPersonal: timeline === "personal",
+    isPublic: timeline !== "personal",
+    local: timeline === "hackersPub",
+  };
+}
+
 export async function readHomeFeedWithEnvironment(
   environment: IEnvironment,
   timeline: HomeFeedTimeline,
 ) {
-  if (timeline === "public") {
-    // Temporarily disabled while the public timeline backend is out of service.
-    // return await fetchRelayQuery(environment, publicTimelineDocument, { first: 20 }).toPromise();
-    return {
-      unavailableReason: "Public timeline is temporarily unavailable.",
-    };
-  }
+  const result = await fetchRelayQuery<homeFeedQuery>(
+    environment,
+    homeFeedQueryDocument,
+    getHomeFeedQueryVariables(timeline, null),
+  ).toPromise();
 
-  return await readPersonalTimelinePageWithEnvironment(environment, null);
+  return requireQueryResult(result, `Could not load the ${timeline} timeline.`);
 }
 
 export async function readPersonalTimelinePageWithEnvironment(
@@ -38,11 +46,27 @@ export async function readPersonalTimelinePageWithEnvironment(
   after: string | null,
 ) {
   const result = await fetchRelayQuery<homeFeedQuery>(environment, homeFeedQueryDocument, {
-    after,
-    first: 20,
+    ...getHomeFeedQueryVariables("personal", after),
   }).toPromise();
 
   return requireQueryResult(result, "Could not load the personal timeline.");
+}
+
+export async function readPublicTimelinePageWithEnvironment(
+  environment: IEnvironment,
+  after: string | null,
+  local: boolean,
+) {
+  const result = await fetchRelayQuery<homeFeedQuery>(
+    environment,
+    homeFeedQueryDocument,
+    getHomeFeedQueryVariables(local ? "hackersPub" : "public", after),
+  ).toPromise();
+
+  return requireQueryResult(
+    result,
+    `Could not load the ${local ? "Hackers' Pub" : "public"} timeline.`,
+  );
 }
 
 export async function readPostDetailWithEnvironment(environment: IEnvironment, postId: string) {
@@ -69,26 +93,26 @@ export const fetchHomeFeed = createServerFn({
   .handler(async ({ data }) => {
     const result = await readHomeFeedWithEnvironment(getRelayEnvironment(), data.timeline);
 
-    if ("unavailableReason" in result) {
-      return {
-        data: null,
-        timeline: data.timeline,
-        unavailableReason: result.unavailableReason,
-      };
-    }
-
     return {
       data: result,
       timeline: data.timeline,
     };
   });
 
-export const fetchPersonalTimelinePage = createServerFn({
+export const fetchHomeTimelinePage = createServerFn({
   method: "GET",
 })
-  .inputValidator((input: { after: string | null }) => input)
+  .inputValidator((input: { after: string | null; timeline: HomeFeedTimeline }) => input)
   .handler(async ({ data }) => {
-    return await readPersonalTimelinePageWithEnvironment(getRelayEnvironment(), data.after);
+    if (data.timeline === "personal") {
+      return await readPersonalTimelinePageWithEnvironment(getRelayEnvironment(), data.after);
+    }
+
+    return await readPublicTimelinePageWithEnvironment(
+      getRelayEnvironment(),
+      data.after,
+      data.timeline === "hackersPub",
+    );
   });
 
 export const fetchPostDetail = createServerFn({

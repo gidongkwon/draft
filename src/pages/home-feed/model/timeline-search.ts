@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const homeFeedSearchSchema = z.object({
-  timeline: z.enum(["personal", "public"]).default("personal"),
+  timeline: z.enum(["personal", "public", "hackersPub"]).default("personal"),
 });
 
 export type HomeFeedSearch = z.infer<typeof homeFeedSearchSchema>;

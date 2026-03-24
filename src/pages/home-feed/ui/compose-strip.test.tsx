@@ -28,6 +28,7 @@ describe("HomeFeedLayout", () => {
       "true",
     );
     expect(screen.getByRole("tab", { name: "Public" })).toBeTruthy();
+    expect(screen.getByRole("tab", { name: "Hackers' Pub" })).toBeTruthy();
     expect(screen.getByText("Feed slot")).toBeTruthy();
   });
 });
