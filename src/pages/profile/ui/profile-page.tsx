@@ -2,6 +2,7 @@ import { Match, Switch } from "solid-js";
 import { graphql } from "relay-runtime";
 import type { PostCardModel, ReactionGroupModel } from "../../../entities/post";
 import { ProfileSummaryCard } from "../../../entities/profile";
+import { Surface } from "../../../shared/ui/surface";
 import { FeedList } from "../../../widgets/feed-list";
 import { stripHtmlTags } from "../../../shared/lib/html";
 import type { profilePageQuery } from "./__generated__/profilePageQuery.graphql";
@@ -114,50 +115,50 @@ export function ProfilePage(props: ProfilePageProps) {
           <section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_18rem]">
             <div class="min-w-0 space-y-4">
               <ProfileSummaryCard profile={resolvedProfile()} />
-              <div class="shell-surface rounded-[1.5rem] px-5 py-5 sm:px-6">
-                <p class="text-[11px] font-semibold tracking-[0.22em] text-[var(--text-muted)]">
+              <Surface as="div" padding="md" variant="floating">
+                <p class="text-[11px] font-semibold tracking-[0.22em] text-fg-muted">
                   Recent posts
                 </p>
-                <h2 class="mt-3 text-[2rem] font-semibold leading-none tracking-[-0.04em] text-[var(--text-primary)]">
+                <h2 class="mt-3 text-[2rem] font-semibold leading-none tracking-[-0.04em] text-fg-primary">
                   Latest posts from {resolvedProfile().name}
                 </h2>
-                <p class="mt-3 max-w-2xl text-sm leading-7 text-[var(--text-secondary)]">
+                <p class="mt-3 max-w-2xl text-sm leading-7 text-fg-secondary">
                   Same feed-first surface, narrowed to one publisher and their latest public work.
                 </p>
-              </div>
+              </Surface>
               <FeedList label="Public timeline" posts={posts()} />
             </div>
             <aside class="space-y-4">
-              <section class="shell-surface rounded-[1.5rem] px-5 py-5">
-                <h2 class="text-[11px] font-semibold tracking-[0.22em] text-[var(--text-muted)]">
+              <Surface as="section" padding="md" variant="floating">
+                <h2 class="text-[11px] font-semibold tracking-[0.22em] text-fg-muted">
                   Profile view
                 </h2>
-                <p class="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
+                <p class="mt-3 text-sm leading-7 text-fg-secondary">
                   Keep identity in the header, keep the feed below, and avoid letting profile chrome
                   overwhelm the reading surface.
                 </p>
-              </section>
-              <section class="shell-surface rounded-[1.5rem] px-5 py-5">
-                <h2 class="text-[11px] font-semibold tracking-[0.22em] text-[var(--text-muted)]">
+              </Surface>
+              <Surface as="section" padding="md" variant="floating">
+                <h2 class="text-[11px] font-semibold tracking-[0.22em] text-fg-muted">
                   Reading cues
                 </h2>
-                <ul class="mt-4 grid gap-2 text-sm text-[var(--text-secondary)]">
-                  <li class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-4 py-3">
+                <ul class="mt-4 grid gap-2 text-sm text-fg-secondary">
+                  <li class="rounded-2xl border border-stroke-subtle bg-surface-subtle px-4 py-3">
                     Header carries identity
                   </li>
-                  <li class="rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-4 py-3">
+                  <li class="rounded-2xl border border-stroke-subtle bg-surface-subtle px-4 py-3">
                     Feed rows mirror home
                   </li>
                 </ul>
-              </section>
+              </Surface>
             </aside>
           </section>
         )}
       </Match>
       <Match when={data()}>
-        <section class="shell-surface rounded-[1.5rem] px-6 py-8 text-sm text-[var(--text-secondary)]">
+        <Surface as="section" class="text-sm text-fg-secondary" padding="lg" variant="floating">
           The requested profile could not be found.
-        </section>
+        </Surface>
       </Match>
     </Switch>
   );

@@ -50,7 +50,7 @@ function List(props: ParentProps<JSX.HTMLAttributes<HTMLDivElement>>) {
     <div
       class={
         local.class ??
-        "inline-flex items-center gap-1 rounded-full border border-[var(--border-subtle)] p-1"
+        "inline-flex items-center gap-1 rounded-full border border-stroke-subtle bg-surface-subtle p-1"
       }
       role="tablist"
       {...others}
@@ -123,7 +123,7 @@ function Trigger(props: TriggerProps) {
       aria-selected={isSelected()}
       class={
         local.class ??
-        "focus-ring inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-medium text-[var(--text-secondary)] transition disabled:cursor-not-allowed disabled:opacity-45 data-[selected=true]:bg-surface data-[selected=true]:text-[var(--text-primary)]"
+        "focus-ring inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-medium text-fg-secondary transition disabled:cursor-not-allowed disabled:opacity-45 data-[selected=true]:border data-[selected=true]:border-stroke-subtle data-[selected=true]:bg-surface-panel data-[selected=true]:text-fg-primary"
       }
       data-selected={isSelected()}
       disabled={local.disabled}

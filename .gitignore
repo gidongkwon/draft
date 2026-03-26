@@ -30,6 +30,7 @@ Thumbs.db
 # Generated Files
 *.gen.ts
 output/
+.tanstack/
 
 # AI
 .superpowers/

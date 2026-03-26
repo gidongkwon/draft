@@ -1,5 +1,6 @@
 import { For, Show } from "solid-js";
 import { PostPreviewCard, type PostCardModel } from "../../../entities/post";
+import { Surface } from "../../../shared/ui/surface";
 
 type FeedListProps = {
   emptyMessage?: string;
@@ -12,18 +13,26 @@ export function FeedList(props: FeedListProps) {
     <Show
       when={props.posts.length > 0}
       fallback={
-        <section class="shell-surface rounded-[1.5rem] px-6 py-12 text-center text-sm text-[var(--text-secondary)]">
+        <Surface
+          as="section"
+          class="text-center text-sm text-fg-secondary"
+          padding="lg"
+          variant="floating"
+        >
           {props.emptyMessage ?? "No posts found."}
-        </section>
+        </Surface>
       }
     >
-      <section
+      <Surface
+        as="section"
         aria-label={props.label ?? "Timeline"}
-        class="shell-surface feed-divider overflow-hidden rounded-[1.5rem]"
+        class="feed-divider overflow-hidden"
+        padding="none"
         role="feed"
+        variant="floating"
       >
         <For each={props.posts}>{(post) => <PostPreviewCard post={post} />}</For>
-      </section>
+      </Surface>
     </Show>
   );
 }

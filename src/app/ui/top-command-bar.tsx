@@ -2,7 +2,9 @@ import type { JSX } from "solid-js";
 import Search20Regular from "~icons/fluent/search-20-regular";
 import Add24Filled from "~icons/fluent/add-24-filled";
 import { AppIcon } from "../../shared/ui/app-icon";
+import { Button } from "../../shared/ui/button";
 import { Logo } from "../../shared/ui/logo";
+import { TextField } from "../../shared/ui/text-field";
 
 type TopCommandBarProps = {
   actions?: JSX.Element;
@@ -24,25 +26,21 @@ export function TopCommandBar(props: TopCommandBarProps) {
               Search the network
             </label>
             <AppIcon
-              class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-[var(--text-muted)]"
+              class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg text-fg-muted"
               icon={Search20Regular}
               size="lg"
             />
-            <input
+            <TextField
               id="global-search"
-              type="search"
+              class="min-w-0 rounded-full pl-11 pr-4"
               placeholder="Search"
-              class="focus-ring h-11 min-w-0 w-full rounded-full border border-[var(--border-subtle)] bg-[var(--surface-muted)] pl-11 pr-4 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)]"
+              type="search"
             />
           </div>
-          <button
-            class="focus-ring inline-flex h-11 items-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--accent-soft)] px-4 text-sm font-medium text-[var(--text-primary)] transition hover:border-[var(--border-strong)] hover:bg-[var(--accent-soft)]"
-            type="button"
-            onClick={() => props.onNewPost?.()}
-          >
+          <Button onClick={() => props.onNewPost?.()}>
             <AppIcon icon={Add24Filled} size="lg" />
             New post
-          </button>
+          </Button>
         </div>
 
         {props.actions}

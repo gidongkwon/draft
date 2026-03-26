@@ -5,6 +5,7 @@ import {
   type PostDetailModel,
   type ReactionGroupModel,
 } from "../../../entities/post";
+import { Surface } from "../../../shared/ui/surface";
 import type { postDetailPageQuery } from "./__generated__/postDetailPageQuery.graphql";
 
 export const postDetailPageDocument = graphql`
@@ -109,9 +110,9 @@ export function PostDetailPage(props: PostDetailPageProps) {
     <Switch>
       <Match when={post()}>{(resolvedPost) => <PostDetailView post={resolvedPost()} />}</Match>
       <Match when={data()}>
-        <section class="shell-surface rounded-[1.5rem] px-6 py-8 text-sm text-[var(--text-secondary)]">
+        <Surface as="section" class="text-sm text-fg-secondary" padding="lg" variant="floating">
           The requested post could not be found.
-        </section>
+        </Surface>
       </Match>
     </Switch>
   );

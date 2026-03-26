@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e2bd0c08e4ad93e41eac72ffefbfc89e>>
+ * @generated SignedSource<<b2b9dc1cdd90495c87baca4a477cb1e3>>
  * @lightSyntaxTransform
  * @nogrep
  * @codegen-command: vp exec relay-compiler
@@ -61,6 +61,42 @@ export type homeFeedQuery$data = {
             } | null | undefined;
           } | null | undefined;
         } | null | undefined;
+        readonly sharedPost: {
+          readonly __typename: string;
+          readonly actor: {
+            readonly avatarUrl: string;
+            readonly handle: string;
+            readonly rawName: string | null | undefined;
+            readonly username: string;
+          };
+          readonly engagementStats: {
+            readonly reactions: number;
+            readonly replies: number;
+            readonly shares: number;
+          };
+          readonly excerpt: string;
+          readonly id: string;
+          readonly name: string | null | undefined;
+          readonly published: string;
+          readonly reactionGroups: ReadonlyArray<{
+            readonly emoji?: string;
+            readonly reactors?: {
+              readonly totalCount: number;
+            };
+          }>;
+          readonly replyTarget: {
+            readonly id: string;
+            readonly replyTarget: {
+              readonly id: string;
+              readonly replyTarget: {
+                readonly id: string;
+                readonly replyTarget: {
+                  readonly id: string;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
       };
       readonly sharersCount: number;
     }>;
@@ -108,6 +144,42 @@ export type homeFeedQuery$data = {
               readonly id: string;
               readonly replyTarget: {
                 readonly id: string;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+        readonly sharedPost: {
+          readonly __typename: string;
+          readonly actor: {
+            readonly avatarUrl: string;
+            readonly handle: string;
+            readonly rawName: string | null | undefined;
+            readonly username: string;
+          };
+          readonly engagementStats: {
+            readonly reactions: number;
+            readonly replies: number;
+            readonly shares: number;
+          };
+          readonly excerpt: string;
+          readonly id: string;
+          readonly name: string | null | undefined;
+          readonly published: string;
+          readonly reactionGroups: ReadonlyArray<{
+            readonly emoji?: string;
+            readonly reactors?: {
+              readonly totalCount: number;
+            };
+          }>;
+          readonly replyTarget: {
+            readonly id: string;
+            readonly replyTarget: {
+              readonly id: string;
+              readonly replyTarget: {
+                readonly id: string;
+                readonly replyTarget: {
+                  readonly id: string;
+                } | null | undefined;
               } | null | undefined;
             } | null | undefined;
           } | null | undefined;
@@ -237,6 +309,54 @@ v17 = {
   "storageKey": null
 },
 v18 = {
+  "alias": null,
+  "args": null,
+  "concreteType": null,
+  "kind": "LinkedField",
+  "name": "replyTarget",
+  "plural": false,
+  "selections": [
+    (v14/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": null,
+      "kind": "LinkedField",
+      "name": "replyTarget",
+      "plural": false,
+      "selections": [
+        (v14/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": null,
+          "kind": "LinkedField",
+          "name": "replyTarget",
+          "plural": false,
+          "selections": [
+            (v14/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": null,
+              "kind": "LinkedField",
+              "name": "replyTarget",
+              "plural": false,
+              "selections": [
+                (v14/*: any*/)
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v19 = {
   "kind": "InlineFragment",
   "selections": [
     {
@@ -268,14 +388,41 @@ v18 = {
   "type": "EmojiReactionGroup",
   "abstractKey": null
 },
-v19 = {
+v20 = {
+  "alias": null,
+  "args": null,
+  "concreteType": null,
+  "kind": "LinkedField",
+  "name": "reactionGroups",
+  "plural": true,
+  "selections": [
+    (v19/*: any*/)
+  ],
+  "storageKey": null
+},
+v21 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "avatarUrl",
   "storageKey": null
 },
-v20 = {
+v22 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "Actor",
+  "kind": "LinkedField",
+  "name": "actor",
+  "plural": false,
+  "selections": [
+    (v10/*: any*/),
+    (v11/*: any*/),
+    (v12/*: any*/),
+    (v21/*: any*/)
+  ],
+  "storageKey": null
+},
+v23 = {
   "alias": null,
   "args": null,
   "concreteType": "PostEngagementStats",
@@ -307,7 +454,7 @@ v20 = {
   ],
   "storageKey": null
 },
-v21 = [
+v24 = [
   (v8/*: any*/),
   (v9/*: any*/),
   {
@@ -337,87 +484,35 @@ v21 = [
       (v15/*: any*/),
       (v16/*: any*/),
       (v17/*: any*/),
+      (v18/*: any*/),
+      (v20/*: any*/),
+      (v22/*: any*/),
+      (v23/*: any*/),
       {
         "alias": null,
         "args": null,
         "concreteType": null,
         "kind": "LinkedField",
-        "name": "replyTarget",
+        "name": "sharedPost",
         "plural": false,
         "selections": [
+          (v13/*: any*/),
           (v14/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": null,
-            "kind": "LinkedField",
-            "name": "replyTarget",
-            "plural": false,
-            "selections": [
-              (v14/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": null,
-                "kind": "LinkedField",
-                "name": "replyTarget",
-                "plural": false,
-                "selections": [
-                  (v14/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": null,
-                    "kind": "LinkedField",
-                    "name": "replyTarget",
-                    "plural": false,
-                    "selections": [
-                      (v14/*: any*/)
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
+          (v15/*: any*/),
+          (v16/*: any*/),
+          (v17/*: any*/),
+          (v18/*: any*/),
+          (v20/*: any*/),
+          (v22/*: any*/),
+          (v23/*: any*/)
         ],
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": null,
-        "kind": "LinkedField",
-        "name": "reactionGroups",
-        "plural": true,
-        "selections": [
-          (v18/*: any*/)
-        ],
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Actor",
-        "kind": "LinkedField",
-        "name": "actor",
-        "plural": false,
-        "selections": [
-          (v10/*: any*/),
-          (v11/*: any*/),
-          (v12/*: any*/),
-          (v19/*: any*/)
-        ],
-        "storageKey": null
-      },
-      (v20/*: any*/)
+      }
     ],
     "storageKey": null
   }
 ],
-v22 = {
+v25 = {
   "alias": null,
   "args": null,
   "concreteType": "PageInfo",
@@ -442,7 +537,7 @@ v22 = {
   ],
   "storageKey": null
 },
-v23 = [
+v26 = [
   (v5/*: any*/),
   (v6/*: any*/),
   {
@@ -451,7 +546,88 @@ v23 = [
     "variableName": "local"
   }
 ],
-v24 = [
+v27 = {
+  "alias": null,
+  "args": null,
+  "concreteType": null,
+  "kind": "LinkedField",
+  "name": "replyTarget",
+  "plural": false,
+  "selections": [
+    (v13/*: any*/),
+    (v14/*: any*/),
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": null,
+      "kind": "LinkedField",
+      "name": "replyTarget",
+      "plural": false,
+      "selections": [
+        (v13/*: any*/),
+        (v14/*: any*/),
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": null,
+          "kind": "LinkedField",
+          "name": "replyTarget",
+          "plural": false,
+          "selections": [
+            (v13/*: any*/),
+            (v14/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": null,
+              "kind": "LinkedField",
+              "name": "replyTarget",
+              "plural": false,
+              "selections": [
+                (v13/*: any*/),
+                (v14/*: any*/)
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
+},
+v28 = {
+  "alias": null,
+  "args": null,
+  "concreteType": null,
+  "kind": "LinkedField",
+  "name": "reactionGroups",
+  "plural": true,
+  "selections": [
+    (v13/*: any*/),
+    (v19/*: any*/)
+  ],
+  "storageKey": null
+},
+v29 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "Actor",
+  "kind": "LinkedField",
+  "name": "actor",
+  "plural": false,
+  "selections": [
+    (v10/*: any*/),
+    (v11/*: any*/),
+    (v12/*: any*/),
+    (v21/*: any*/),
+    (v14/*: any*/)
+  ],
+  "storageKey": null
+},
+v30 = [
   (v8/*: any*/),
   (v9/*: any*/),
   {
@@ -482,88 +658,30 @@ v24 = [
       (v15/*: any*/),
       (v16/*: any*/),
       (v17/*: any*/),
+      (v27/*: any*/),
+      (v28/*: any*/),
+      (v29/*: any*/),
+      (v23/*: any*/),
       {
         "alias": null,
         "args": null,
         "concreteType": null,
         "kind": "LinkedField",
-        "name": "replyTarget",
+        "name": "sharedPost",
         "plural": false,
         "selections": [
           (v13/*: any*/),
           (v14/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": null,
-            "kind": "LinkedField",
-            "name": "replyTarget",
-            "plural": false,
-            "selections": [
-              (v13/*: any*/),
-              (v14/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": null,
-                "kind": "LinkedField",
-                "name": "replyTarget",
-                "plural": false,
-                "selections": [
-                  (v13/*: any*/),
-                  (v14/*: any*/),
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": null,
-                    "kind": "LinkedField",
-                    "name": "replyTarget",
-                    "plural": false,
-                    "selections": [
-                      (v13/*: any*/),
-                      (v14/*: any*/)
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
+          (v15/*: any*/),
+          (v16/*: any*/),
+          (v17/*: any*/),
+          (v27/*: any*/),
+          (v28/*: any*/),
+          (v29/*: any*/),
+          (v23/*: any*/)
         ],
         "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": null,
-        "kind": "LinkedField",
-        "name": "reactionGroups",
-        "plural": true,
-        "selections": [
-          (v13/*: any*/),
-          (v18/*: any*/)
-        ],
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "Actor",
-        "kind": "LinkedField",
-        "name": "actor",
-        "plural": false,
-        "selections": [
-          (v10/*: any*/),
-          (v11/*: any*/),
-          (v12/*: any*/),
-          (v19/*: any*/),
-          (v14/*: any*/)
-        ],
-        "storageKey": null
-      },
-      (v20/*: any*/)
+      }
     ],
     "storageKey": null
   }
@@ -601,10 +719,10 @@ return {
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
-                "selections": (v21/*: any*/),
+                "selections": (v24/*: any*/),
                 "storageKey": null
               },
-              (v22/*: any*/)
+              (v25/*: any*/)
             ],
             "storageKey": null
           }
@@ -617,7 +735,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v23/*: any*/),
+            "args": (v26/*: any*/),
             "concreteType": "QueryPublicTimelineConnection",
             "kind": "LinkedField",
             "name": "publicTimeline",
@@ -630,10 +748,10 @@ return {
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
-                "selections": (v21/*: any*/),
+                "selections": (v24/*: any*/),
                 "storageKey": null
               },
-              (v22/*: any*/)
+              (v25/*: any*/)
             ],
             "storageKey": null
           }
@@ -675,10 +793,10 @@ return {
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
-                "selections": (v24/*: any*/),
+                "selections": (v30/*: any*/),
                 "storageKey": null
               },
-              (v22/*: any*/)
+              (v25/*: any*/)
             ],
             "storageKey": null
           }
@@ -691,7 +809,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v23/*: any*/),
+            "args": (v26/*: any*/),
             "concreteType": "QueryPublicTimelineConnection",
             "kind": "LinkedField",
             "name": "publicTimeline",
@@ -704,10 +822,10 @@ return {
                 "kind": "LinkedField",
                 "name": "edges",
                 "plural": true,
-                "selections": (v24/*: any*/),
+                "selections": (v30/*: any*/),
                 "storageKey": null
               },
-              (v22/*: any*/)
+              (v25/*: any*/)
             ],
             "storageKey": null
           }
@@ -716,16 +834,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "3ae9bfb96a46f2de00d5603a5c4f5095",
+    "cacheID": "ac449281881dbd391aa7e39a251906ea",
     "id": null,
     "metadata": {},
     "name": "homeFeedQuery",
     "operationKind": "query",
-    "text": "query homeFeedQuery(\n  $first: Int!\n  $after: String\n  $isPersonal: Boolean!\n  $isPublic: Boolean!\n  $local: Boolean!\n) {\n  personalTimeline(first: $first, after: $after) @include(if: $isPersonal) {\n    edges {\n      cursor\n      sharersCount\n      lastSharer {\n        handle\n        rawName\n        username\n        id\n      }\n      node {\n        __typename\n        id\n        name\n        excerpt\n        published\n        replyTarget {\n          __typename\n          id\n          replyTarget {\n            __typename\n            id\n            replyTarget {\n              __typename\n              id\n              replyTarget {\n                __typename\n                id\n              }\n            }\n          }\n        }\n        reactionGroups {\n          __typename\n          ... on EmojiReactionGroup {\n            emoji\n            reactors {\n              totalCount\n            }\n          }\n        }\n        actor {\n          handle\n          rawName\n          username\n          avatarUrl\n          id\n        }\n        engagementStats {\n          reactions\n          replies\n          shares\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  publicTimeline(first: $first, after: $after, local: $local) @include(if: $isPublic) {\n    edges {\n      cursor\n      sharersCount\n      lastSharer {\n        handle\n        rawName\n        username\n        id\n      }\n      node {\n        __typename\n        id\n        name\n        excerpt\n        published\n        replyTarget {\n          __typename\n          id\n          replyTarget {\n            __typename\n            id\n            replyTarget {\n              __typename\n              id\n              replyTarget {\n                __typename\n                id\n              }\n            }\n          }\n        }\n        reactionGroups {\n          __typename\n          ... on EmojiReactionGroup {\n            emoji\n            reactors {\n              totalCount\n            }\n          }\n        }\n        actor {\n          handle\n          rawName\n          username\n          avatarUrl\n          id\n        }\n        engagementStats {\n          reactions\n          replies\n          shares\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query homeFeedQuery(\n  $first: Int!\n  $after: String\n  $isPersonal: Boolean!\n  $isPublic: Boolean!\n  $local: Boolean!\n) {\n  personalTimeline(first: $first, after: $after) @include(if: $isPersonal) {\n    edges {\n      cursor\n      sharersCount\n      lastSharer {\n        handle\n        rawName\n        username\n        id\n      }\n      node {\n        __typename\n        id\n        name\n        excerpt\n        published\n        replyTarget {\n          __typename\n          id\n          replyTarget {\n            __typename\n            id\n            replyTarget {\n              __typename\n              id\n              replyTarget {\n                __typename\n                id\n              }\n            }\n          }\n        }\n        reactionGroups {\n          __typename\n          ... on EmojiReactionGroup {\n            emoji\n            reactors {\n              totalCount\n            }\n          }\n        }\n        actor {\n          handle\n          rawName\n          username\n          avatarUrl\n          id\n        }\n        engagementStats {\n          reactions\n          replies\n          shares\n        }\n        sharedPost {\n          __typename\n          id\n          name\n          excerpt\n          published\n          replyTarget {\n            __typename\n            id\n            replyTarget {\n              __typename\n              id\n              replyTarget {\n                __typename\n                id\n                replyTarget {\n                  __typename\n                  id\n                }\n              }\n            }\n          }\n          reactionGroups {\n            __typename\n            ... on EmojiReactionGroup {\n              emoji\n              reactors {\n                totalCount\n              }\n            }\n          }\n          actor {\n            handle\n            rawName\n            username\n            avatarUrl\n            id\n          }\n          engagementStats {\n            reactions\n            replies\n            shares\n          }\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  publicTimeline(first: $first, after: $after, local: $local) @include(if: $isPublic) {\n    edges {\n      cursor\n      sharersCount\n      lastSharer {\n        handle\n        rawName\n        username\n        id\n      }\n      node {\n        __typename\n        id\n        name\n        excerpt\n        published\n        replyTarget {\n          __typename\n          id\n          replyTarget {\n            __typename\n            id\n            replyTarget {\n              __typename\n              id\n              replyTarget {\n                __typename\n                id\n              }\n            }\n          }\n        }\n        reactionGroups {\n          __typename\n          ... on EmojiReactionGroup {\n            emoji\n            reactors {\n              totalCount\n            }\n          }\n        }\n        actor {\n          handle\n          rawName\n          username\n          avatarUrl\n          id\n        }\n        engagementStats {\n          reactions\n          replies\n          shares\n        }\n        sharedPost {\n          __typename\n          id\n          name\n          excerpt\n          published\n          replyTarget {\n            __typename\n            id\n            replyTarget {\n              __typename\n              id\n              replyTarget {\n                __typename\n                id\n                replyTarget {\n                  __typename\n                  id\n                }\n              }\n            }\n          }\n          reactionGroups {\n            __typename\n            ... on EmojiReactionGroup {\n              emoji\n              reactors {\n                totalCount\n              }\n            }\n          }\n          actor {\n            handle\n            rawName\n            username\n            avatarUrl\n            id\n          }\n          engagementStats {\n            reactions\n            replies\n            shares\n          }\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c51ffe7589a2c10bd4cd4d1ff0887c35";
+(node as any).hash = "2000e5551cc6a04463e23c810dc8e8fd";
 
 export default node;

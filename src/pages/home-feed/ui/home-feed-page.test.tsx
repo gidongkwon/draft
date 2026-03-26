@@ -39,6 +39,28 @@ type ReplyTargetFixture = {
   replyTarget: ReplyTargetFixture | null;
 };
 
+type TimelineNodeFixture = {
+  __typename: "Article";
+  actor: {
+    avatarUrl: string;
+    handle: string;
+    rawName: string;
+    username: string;
+  };
+  engagementStats: {
+    reactions: number;
+    replies: number;
+    shares: number;
+  };
+  excerpt: string;
+  id: string;
+  name: string;
+  published: string;
+  reactionGroups: { emoji: string; reactors: { totalCount: number } }[];
+  replyTarget: ReplyTargetFixture | null;
+  sharedPost: TimelineNodeFixture | null;
+};
+
 function createReplyTargetChain(replyTargetIds: string[]) {
   return replyTargetIds.reduceRight<ReplyTargetFixture | null>(
     (current, id) => ({
@@ -56,6 +78,7 @@ function createTimelineEdge(
   options?: {
     published?: string;
     replyTargetIds?: string[];
+    sharedPost?: TimelineNodeFixture | null;
   },
 ): TestEdge {
   return {
@@ -84,6 +107,7 @@ function createTimelineEdge(
       name: title,
       published: options?.published ?? "2026-03-23T05:00:00.000Z",
       replyTarget: createReplyTargetChain(options?.replyTargetIds ?? []),
+      sharedPost: options?.sharedPost ?? null,
     },
   } as unknown as TestEdge;
 }
@@ -102,6 +126,40 @@ function createRepostedTimelineEdge(
       username: "bob",
     },
     sharersCount,
+  };
+}
+
+function createSharedPostFixture(
+  id: string,
+  title: string,
+  options?: {
+    published?: string;
+    replyTargetIds?: string[];
+  },
+): TimelineNodeFixture {
+  return {
+    __typename: "Article",
+    actor: {
+      avatarUrl: `https://example.com/${id}.png`,
+      handle: `@${id}`,
+      rawName: `${title} Author`,
+      username: id,
+    },
+    engagementStats: {
+      reactions: 8,
+      replies: 3,
+      shares: 2,
+    },
+    excerpt: `${title} excerpt`,
+    id,
+    name: title,
+    published: options?.published ?? "2026-03-23T05:00:00.000Z",
+    reactionGroups: [
+      { emoji: "🔥", reactors: { totalCount: 4 } },
+      { emoji: "👏", reactors: { totalCount: 3 } },
+    ],
+    replyTarget: createReplyTargetChain(options?.replyTargetIds ?? []),
+    sharedPost: null,
   };
 }
 
@@ -264,6 +322,26 @@ describe("HomeFeedFeed", () => {
 
     expect(screen.getByRole("feed", { name: "Hackers' Pub timeline" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "First post" })).toBeTruthy();
+  });
+
+  it("keeps repost attribution visible in the Hackers' Pub timeline", () => {
+    render(() => (
+      <HomeFeedFeed
+        data={createHomeFeedData(
+          [
+            createTimelineEdge("share-1", "Shared wrapper", "cursor-1", {
+              sharedPost: createSharedPostFixture("post-1", "First post"),
+            }),
+          ],
+          "hackersPub",
+        )}
+        timeline="hackersPub"
+      />
+    ));
+
+    expect(screen.getByText("Shared by Shared wrapper Author")).toBeTruthy();
+    expect(screen.getByRole("link", { name: "First post" })).toBeTruthy();
+    expect(screen.getByText("@post-1")).toBeTruthy();
   });
 
   it("renders a sign-in prompt when the personal timeline is unavailable to signed-out viewers", () => {

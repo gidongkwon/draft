@@ -1,4 +1,5 @@
 import type { ParentProps } from "solid-js";
+import { Surface } from "../../../shared/ui/surface";
 import type { HomeFeedTimeline } from "../model/timeline-search";
 import { Tabs } from "../../../shared/ui/tabs";
 import { ComposeStrip } from "./compose-strip";
@@ -26,9 +27,9 @@ export function HomeFeedLayout(props: HomeFeedLayoutProps) {
         {props.children}
       </div>
       <aside class="space-y-4">
-        <section class="shell-surface rounded-[1.5rem] px-5 py-5">
-          <h2 class="text-sm font-semibold text-[var(--text-muted)]">Follow Recommendations</h2>
-        </section>
+        <Surface as="section" padding="md" variant="floating">
+          <h2 class="text-sm font-semibold text-fg-muted">Follow Recommendations</h2>
+        </Surface>
       </aside>
     </section>
   );

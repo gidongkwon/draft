@@ -1,4 +1,6 @@
 import { Show, createEffect, createMemo, createSignal, onCleanup } from "solid-js";
+import { cva } from "class-variance-authority";
+import { cx } from "./styles";
 
 type AvatarSize = "sm" | "md" | "lg";
 
@@ -10,11 +12,28 @@ type AvatarProps = {
   src?: string | null;
 };
 
-const sizeClassMap: Record<AvatarSize, string> = {
-  sm: "h-9 w-9 text-xs",
-  md: "h-11 w-11 text-sm",
-  lg: "h-18 w-18 text-lg sm:h-20 sm:w-20",
-};
+const avatarVariants = cva("shrink-0 rounded-full border border-stroke-subtle object-cover", {
+  variants: {
+    size: {
+      sm: "size-9 text-xs",
+      md: "size-11 text-sm",
+      lg: "size-18 text-lg sm:size-20",
+    },
+  },
+});
+
+const fallbackVariants = cva(
+  "inline-flex shrink-0 items-center justify-center rounded-full border border-stroke-subtle bg-accent-soft font-semibold tracking-[0.08em] text-fg-primary",
+  {
+    variants: {
+      size: {
+        sm: "size-9 text-xs",
+        md: "size-11 text-sm",
+        lg: "size-18 text-lg sm:size-20",
+      },
+    },
+  },
+);
 
 function toInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -36,7 +55,6 @@ export function Avatar(props: AvatarProps) {
   const hasImage = createMemo(() => Boolean(props.src) && !failed());
   const initials = createMemo(() => toInitials(props.name));
   const alt = () => props.alt ?? `${props.name} avatar`;
-  const sizeClass = () => sizeClassMap[props.size];
 
   createEffect(() => {
     const src = props.src;
@@ -80,17 +98,14 @@ export function Avatar(props: AvatarProps) {
     <Show
       when={hasImage()}
       fallback={
-        <span
-          aria-hidden="true"
-          class={`inline-flex shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] font-semibold tracking-[0.08em] text-[var(--text-primary)] ${sizeClass()} ${props.class ?? ""}`}
-        >
+        <span aria-hidden="true" class={cx(fallbackVariants({ size: props.size }), props.class)}>
           {initials()}
         </span>
       }
     >
       <img
         alt={alt()}
-        class={`shrink-0 rounded-full object-cover ${sizeClass()} ${props.class ?? ""}`}
+        class={cx(avatarVariants({ size: props.size }), props.class)}
         ref={(element) => {
           imageRef = element;
         }}

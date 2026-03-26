@@ -10,12 +10,10 @@ export function HomeFeedErrorView(props: HomeFeedErrorViewProps) {
 
   return (
     <section class="mt-12">
-      <h1 class="font-code italic text-3xl text-[var(--text-primary)]">
-        The timeline could not be loaded.
-      </h1>
-      <p class="mt-4 text-sm leading-7 text-[var(--text-secondary)]">{message}</p>
+      <h1 class="font-code italic text-3xl text-fg-primary">The timeline could not be loaded.</h1>
+      <p class="mt-4 text-sm leading-7 text-fg-secondary">{message}</p>
       <a
-        class="mt-6 inline-flex justify-center text-sm font-medium text-[var(--accent-strong)] underline"
+        class="mt-6 inline-flex justify-center text-sm font-medium text-accent-strong underline"
         href="/"
       >
         Return to the feed

@@ -131,7 +131,7 @@ function Content(props: ParentProps<{ class?: string }>) {
       <div
         class={
           props.class ??
-          "absolute right-0 top-full z-30 mt-2 min-w-44 rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-strong)] p-2 shadow-[var(--shadow-soft)]"
+          "absolute right-0 top-full z-30 mt-2 min-w-48 rounded-3xl border border-stroke-subtle bg-surface-panel p-2 shadow-panel backdrop-blur-[18px]"
         }
         id={context.contentId}
         role="menu"
@@ -149,7 +149,7 @@ function Item(props: ParentProps<{ class?: string; onSelect?: () => void }>) {
     <button
       class={
         props.class ??
-        "focus-ring inline-flex w-full items-center gap-2 rounded-[0.85rem] px-3 py-2 text-left text-sm font-medium text-[var(--text-primary)] transition hover:bg-[var(--surface-muted)]"
+        "focus-ring inline-flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-left text-sm font-medium text-fg-primary transition hover:bg-surface-subtle"
       }
       role="menuitem"
       type="button"

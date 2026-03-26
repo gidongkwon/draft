@@ -30,6 +30,8 @@ import {
   requestSignInChallenge,
   signOut,
 } from "../shared/auth/server";
+import { Surface } from "../shared/ui/surface";
+import { ThemeProvider } from "../shared/ui/theme-provider";
 
 export const Route = createRootRouteWithContext<AppRouterContext>()({
   beforeLoad: async () => {
@@ -57,20 +59,20 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
   errorComponent: RootRouteErrorView,
   notFoundComponent: () => {
     return (
-      <section class="mx-auto max-w-3xl px-6 py-16">
-        <p class="text-sm tracking-[0.24em] text-stone-500">Not found</p>
-        <h1 class="mt-4 font-code text-4xl">This page does not exist.</h1>
-        <a class="mt-6 inline-flex text-sm font-medium text-amber-700 underline" href="/">
+      <Surface as="section" class="mx-auto mt-12 max-w-3xl" padding="lg" variant="floating">
+        <p class="text-sm tracking-[0.24em] text-fg-muted">Not found</p>
+        <h1 class="mt-4 font-code text-4xl text-fg-primary">This page does not exist.</h1>
+        <a class="mt-6 inline-flex text-sm font-medium text-accent-strong underline" href="/">
           Return to the latest feed
         </a>
-      </section>
+      </Surface>
     );
   },
 });
 
 function RootDocument(props: { children: import("solid-js").JSX.Element }) {
   return (
-    <html lang="en">
+    <html data-theme="dark" lang="en">
       <head>
         <HydrationScript />
       </head>
@@ -114,32 +116,34 @@ function RootComponent() {
   }
 
   return (
-    <RelayProvider environment={getRelayEnvironment()}>
-      <AuthTriggerProvider onSignInClick={() => authModal.openDirectly()}>
-        <AppShell
-          onNewPost={onNewPost}
-          onSignInClick={() => authModal.openDirectly()}
-          onSignOut={onSignOut}
-          viewer={routeContext().viewer}
-        >
-          <Outlet />
-          <AuthModal
-            open={authModal.state.open}
-            onClose={() => authModal.close()}
-            onSignedIn={onSignedIn}
-            completeSignIn={({ code, token }) => completeSignInFn({ data: { code, token } })}
-            requestChallenge={({ identifier }) =>
-              requestSignInChallengeFn({
-                data: {
-                  identifier,
-                  locale: "en",
-                },
-              })
-            }
-          />
-          <TanStackRouterDevtools position="bottom-right" />
-        </AppShell>
-      </AuthTriggerProvider>
-    </RelayProvider>
+    <ThemeProvider>
+      <RelayProvider environment={getRelayEnvironment()}>
+        <AuthTriggerProvider onSignInClick={() => authModal.openDirectly()}>
+          <AppShell
+            onNewPost={onNewPost}
+            onSignInClick={() => authModal.openDirectly()}
+            onSignOut={onSignOut}
+            viewer={routeContext().viewer}
+          >
+            <Outlet />
+            <AuthModal
+              open={authModal.state.open}
+              onClose={() => authModal.close()}
+              onSignedIn={onSignedIn}
+              completeSignIn={({ code, token }) => completeSignInFn({ data: { code, token } })}
+              requestChallenge={({ identifier }) =>
+                requestSignInChallengeFn({
+                  data: {
+                    identifier,
+                    locale: "en",
+                  },
+                })
+              }
+            />
+            <TanStackRouterDevtools position="bottom-right" />
+          </AppShell>
+        </AuthTriggerProvider>
+      </RelayProvider>
+    </ThemeProvider>
   );
 }

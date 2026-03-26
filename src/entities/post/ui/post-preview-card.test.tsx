@@ -4,7 +4,7 @@ import { PostPreviewCard } from "./post-preview-card";
 
 describe("PostPreviewCard", () => {
   it("renders an article card with a headline and summary", () => {
-    render(() => (
+    const { container } = render(() => (
       <PostPreviewCard
         post={{
           id: "post-1",
@@ -51,6 +51,9 @@ describe("PostPreviewCard", () => {
     expect(screen.getByText("Shared by Bob Smith and 1 other")).toBeTruthy();
     expect(screen.getByText("🔥")).toBeTruthy();
     expect(screen.getByText("8")).toBeTruthy();
+    expect(
+      container.querySelector("[data-share-summary='true'] + div [data-avatar-shell='true']"),
+    ).toBeTruthy();
   });
 
   it("renders a note card without a headline when the post has no title", () => {

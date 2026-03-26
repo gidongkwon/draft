@@ -1,22 +1,118 @@
 @import url("https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&display=swap");
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Min Sans";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/MinSansVF.woff2") format("woff2");
+}
+
 :root {
-  --app-bg: #060608;
-  --app-bg-strong: #0b0d10;
-  --surface: rgb(16 18 22 / 0.88);
-  --surface-strong: rgb(22 24 29 / 0.98);
-  --surface-muted: rgb(255 255 255 / 0.035);
-  --border-subtle: rgb(255 255 255 / 0.08);
-  --border-strong: rgb(255 255 255 / 0.14);
-  --text-primary: #fcf9f3;
-  --text-secondary: #b8b0a3;
-  --text-muted: #847d72;
-  --accent: #d8a24a;
-  --accent-strong: #efc165;
-  --accent-soft: rgb(216 162 74 / 0.14);
-  --shadow-soft: 0 24px 70px rgb(0 0 0 / 0.34);
-  --focus-ring: 0 0 0 4px rgb(216 162 74 / 0.18);
+  --raw-ink-980: #060608;
+  --raw-ink-950: #0b0d10;
+  --raw-ink-900: #12161c;
+  --raw-ink-870: #181d24;
+  --raw-ink-820: #1e252e;
+  --raw-paper-50: #fcf9f3;
+  --raw-paper-100: #f2ece1;
+  --raw-paper-300: #c7bbab;
+  --raw-paper-500: #8e8476;
+  --raw-amber-300: #efc165;
+  --raw-amber-400: #d8a24a;
+  --raw-amber-500: #b67a1f;
+  --raw-blue-400: #5470ff;
+  --raw-red-400: #d96262;
+  --raw-green-400: #63b184;
+  --raw-white-12: rgb(255 255 255 / 0.12);
+  --raw-white-08: rgb(255 255 255 / 0.08);
+  --raw-black-45: rgb(0 0 0 / 0.45);
+
+  --ui-font-sans: "Min Sans", "Avenir Next", "Segoe UI", sans-serif;
+  --ui-font-code: "Google Sans Code", monospace;
+
+  --ui-shadow-soft: 0 24px 70px rgb(0 0 0 / 0.34);
+  --ui-shadow-panel: 0 20px 55px rgb(0 0 0 / 0.28);
+}
+
+:root,
+[data-theme="dark"] {
+  --ui-canvas: var(--raw-ink-980);
+  --ui-canvas-strong: var(--raw-ink-950);
+  --ui-surface-panel: rgb(16 18 22 / 0.9);
+  --ui-surface-glass: rgb(16 18 22 / 0.82);
+  --ui-surface-raised: rgb(23 27 34 / 0.96);
+  --ui-surface-subtle: rgb(255 255 255 / 0.038);
+  --ui-stroke-subtle: var(--raw-white-08);
+  --ui-stroke-strong: rgb(255 255 255 / 0.16);
+  --ui-stroke-accent: rgb(216 162 74 / 0.28);
+  --ui-fg-primary: var(--raw-paper-50);
+  --ui-fg-secondary: #bbb19f;
+  --ui-fg-muted: #887d6d;
+  --ui-accent-solid: var(--raw-amber-400);
+  --ui-accent-strong: var(--raw-amber-300);
+  --ui-accent-soft: rgb(216 162 74 / 0.14);
+  --ui-success-fg: #9fd2b3;
+  --ui-success-soft: rgb(99 177 132 / 0.15);
+  --ui-success-border: rgb(99 177 132 / 0.28);
+  --ui-danger-fg: #f2b5b5;
+  --ui-danger-soft: rgb(217 98 98 / 0.12);
+  --ui-danger-border: rgb(217 98 98 / 0.32);
+  --ui-focus-ring: 0 0 0 4px rgb(216 162 74 / 0.18);
+
+  --app-bg: var(--ui-canvas);
+  --app-bg-strong: var(--ui-canvas-strong);
+  --surface: var(--ui-surface-glass);
+  --surface-strong: var(--ui-surface-raised);
+  --surface-muted: var(--ui-surface-subtle);
+  --border-subtle: var(--ui-stroke-subtle);
+  --border-strong: var(--ui-stroke-strong);
+  --text-primary: var(--ui-fg-primary);
+  --text-secondary: var(--ui-fg-secondary);
+  --text-muted: var(--ui-fg-muted);
+  --accent: var(--ui-accent-solid);
+  --accent-strong: var(--ui-accent-strong);
+  --accent-soft: var(--ui-accent-soft);
+}
+
+[data-theme="light"] {
+  --ui-canvas: #f6f1e8;
+  --ui-canvas-strong: #ebe1d3;
+  --ui-surface-panel: rgb(255 252 247 / 0.92);
+  --ui-surface-glass: rgb(255 252 247 / 0.78);
+  --ui-surface-raised: #ffffff;
+  --ui-surface-subtle: rgb(98 78 46 / 0.06);
+  --ui-stroke-subtle: rgb(79 62 35 / 0.12);
+  --ui-stroke-strong: rgb(79 62 35 / 0.2);
+  --ui-stroke-accent: rgb(182 122 31 / 0.28);
+  --ui-fg-primary: #201913;
+  --ui-fg-secondary: #5f4b35;
+  --ui-fg-muted: #8d775e;
+  --ui-accent-solid: var(--raw-amber-500);
+  --ui-accent-strong: #9c6517;
+  --ui-accent-soft: rgb(182 122 31 / 0.12);
+  --ui-success-fg: #22553b;
+  --ui-success-soft: rgb(99 177 132 / 0.12);
+  --ui-success-border: rgb(99 177 132 / 0.22);
+  --ui-danger-fg: #8d3030;
+  --ui-danger-soft: rgb(217 98 98 / 0.12);
+  --ui-danger-border: rgb(217 98 98 / 0.26);
+  --ui-focus-ring: 0 0 0 4px rgb(182 122 31 / 0.16);
+
+  --app-bg: var(--ui-canvas);
+  --app-bg-strong: var(--ui-canvas-strong);
+  --surface: var(--ui-surface-glass);
+  --surface-strong: var(--ui-surface-raised);
+  --surface-muted: var(--ui-surface-subtle);
+  --border-subtle: var(--ui-stroke-subtle);
+  --border-strong: var(--ui-stroke-strong);
+  --text-primary: var(--ui-fg-primary);
+  --text-secondary: var(--ui-fg-secondary);
+  --text-muted: var(--ui-fg-muted);
+  --accent: var(--ui-accent-solid);
+  --accent-strong: var(--ui-accent-strong);
+  --accent-soft: var(--ui-accent-soft);
 }
 
 @layer base {
@@ -32,11 +128,19 @@
     min-height: 100%;
     color-scheme: dark;
     background:
-      radial-gradient(circle at top left, rgb(216 162 74 / 0.12), transparent 24rem),
-      radial-gradient(circle at right center, rgb(84 112 255 / 0.08), transparent 26rem),
+      radial-gradient(
+        circle at top left,
+        color-mix(in srgb, var(--ui-accent-solid) 18%, transparent),
+        transparent 24rem
+      ),
+      radial-gradient(
+        circle at right center,
+        color-mix(in srgb, var(--raw-blue-400) 12%, transparent),
+        transparent 26rem
+      ),
       linear-gradient(180deg, var(--app-bg-strong) 0%, var(--app-bg) 100%);
     color: var(--text-primary);
-    font-family: "Inter", "Avenir Next", "Segoe UI", sans-serif;
+    font-family: var(--ui-font-sans);
   }
 
   body {
@@ -52,7 +156,7 @@
   }
 
   ::selection {
-    background: rgb(216 162 74 / 0.22);
+    background: color-mix(in srgb, var(--ui-accent-solid) 22%, transparent);
   }
 }
 
@@ -61,14 +165,6 @@
     display: grid;
     gap: 1.25rem;
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .glass-panel,
-  .shell-surface {
-    background: var(--surface);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(18px);
   }
 
   .feed-divider > * + * {
@@ -81,14 +177,58 @@
 
   .focus-ring:focus-visible {
     outline: none;
-    box-shadow: var(--focus-ring);
-    border-color: rgb(216 162 74 / 0.36);
+    box-shadow: var(--ui-focus-ring);
+    border-color: color-mix(in srgb, var(--ui-accent-solid) 36%, transparent);
+  }
+
+  .token-eyebrow {
+    color: var(--ui-fg-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+  }
+
+  .token-title {
+    color: var(--ui-fg-primary);
+    font-size: clamp(1.15rem, 1rem + 0.7vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  .token-display {
+    color: var(--ui-fg-primary);
+    font-size: clamp(2.6rem, 2rem + 2vw, 4.5rem);
+    font-weight: 750;
+    letter-spacing: -0.06em;
+    line-height: 0.96;
   }
 }
 
-@theme {
-  --font-code: "Google Sans Code", monospace;
-  --color-surface: var(--surface);
-  --color-surface-muted: var(--surface-muted);
-  --color-surface-strong: var(--surface-strong);
+@theme inline {
+  --font-sans: var(--ui-font-sans);
+  --font-code: var(--ui-font-code);
+  --shadow-soft: var(--ui-shadow-soft);
+  --shadow-panel: var(--ui-shadow-panel);
+  --color-fg-primary: var(--ui-fg-primary);
+  --color-fg-secondary: var(--ui-fg-secondary);
+  --color-fg-muted: var(--ui-fg-muted);
+  --color-surface-panel: var(--ui-surface-panel);
+  --color-surface-glass: var(--ui-surface-glass);
+  --color-surface-raised: var(--ui-surface-raised);
+  --color-surface-subtle: var(--ui-surface-subtle);
+  --color-stroke-subtle: var(--ui-stroke-subtle);
+  --color-stroke-strong: var(--ui-stroke-strong);
+  --color-stroke-accent: var(--ui-stroke-accent);
+  --color-accent-solid: var(--ui-accent-solid);
+  --color-accent-strong: var(--ui-accent-strong);
+  --color-accent-soft: var(--ui-accent-soft);
+  --color-accent-soft-hover: color-mix(in srgb, var(--ui-accent-soft) 80%, transparent);
+  --color-success-fg: var(--ui-success-fg);
+  --color-success-soft: var(--ui-success-soft);
+  --color-success-border: var(--ui-success-border);
+  --color-danger-fg: var(--ui-danger-fg);
+  --color-danger-soft: var(--ui-danger-soft);
+  --color-danger-border: var(--ui-danger-border);
+  --color-danger-border-hover: color-mix(in srgb, var(--ui-danger-fg) 40%, transparent);
 }

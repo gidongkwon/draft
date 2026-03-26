@@ -54,6 +54,44 @@ export const homeFeedQueryDocument = graphql`
             replies
             shares
           }
+          sharedPost {
+            __typename
+            id
+            name
+            excerpt
+            published
+            replyTarget {
+              id
+              replyTarget {
+                id
+                replyTarget {
+                  id
+                  replyTarget {
+                    id
+                  }
+                }
+              }
+            }
+            reactionGroups {
+              ... on EmojiReactionGroup {
+                emoji
+                reactors {
+                  totalCount
+                }
+              }
+            }
+            actor {
+              handle
+              rawName
+              username
+              avatarUrl
+            }
+            engagementStats {
+              reactions
+              replies
+              shares
+            }
+          }
         }
       }
       pageInfo {
@@ -106,6 +144,44 @@ export const homeFeedQueryDocument = graphql`
             reactions
             replies
             shares
+          }
+          sharedPost {
+            __typename
+            id
+            name
+            excerpt
+            published
+            replyTarget {
+              id
+              replyTarget {
+                id
+                replyTarget {
+                  id
+                  replyTarget {
+                    id
+                  }
+                }
+              }
+            }
+            reactionGroups {
+              ... on EmojiReactionGroup {
+                emoji
+                reactors {
+                  totalCount
+                }
+              }
+            }
+            actor {
+              handle
+              rawName
+              username
+              avatarUrl
+            }
+            engagementStats {
+              reactions
+              replies
+              shares
+            }
           }
         }
       }

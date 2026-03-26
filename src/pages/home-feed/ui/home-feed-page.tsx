@@ -1,5 +1,7 @@
 import { Match, Switch } from "solid-js";
 import { useAuthTrigger } from "../../../features/auth/ui/auth-trigger-context";
+import { Button } from "../../../shared/ui/button";
+import { Surface } from "../../../shared/ui/surface";
 import type { HomeFeedTimeline } from "../model/timeline-search";
 import { HomeTimeline } from "./home-timeline";
 import type { homeFeedQuery } from "./__generated__/homeFeedQuery.graphql";
@@ -21,18 +23,12 @@ export function HomeFeedFeed(props: HomeFeedFeedProps) {
         {(connection) => <HomeTimeline connection={connection()} timeline={props.timeline} />}
       </Match>
       <Match when={props.timeline === "personal"}>
-        <section class="shell-surface rounded-[1.5rem] px-6 py-12 text-center">
-          <p class="text-sm leading-7 text-[var(--text-secondary)]">
-            Sign in to view your personal timeline.
-          </p>
-          <button
-            class="focus-ring mt-5 inline-flex items-center rounded-full border border-[var(--border-subtle)] px-4 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:bg-[var(--surface-muted)]"
-            onClick={() => openSignIn()}
-            type="button"
-          >
+        <Surface as="section" class="text-center" padding="lg" variant="floating">
+          <p class="text-sm leading-7 text-fg-secondary">Sign in to view your personal timeline.</p>
+          <Button class="mt-5" variant="secondary" onClick={() => openSignIn()}>
             Sign in
-          </button>
-        </section>
+          </Button>
+        </Surface>
       </Match>
     </Switch>
   );

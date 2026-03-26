@@ -7,6 +7,8 @@ import {
 } from "../../../entities/post";
 import { fetchHomeTimelinePage } from "../../../shared/api/server-queries";
 import { stripHtmlTags } from "../../../shared/lib/html";
+import { Button } from "../../../shared/ui/button";
+import { Surface } from "../../../shared/ui/surface";
 import type { HomeFeedTimeline } from "../model/timeline-search";
 import type { homeFeedQuery } from "./__generated__/homeFeedQuery.graphql";
 import { HomeTimelineThreadRun, type HomeTimelineThreadRunPost } from "./home-timeline-thread-run";
@@ -48,6 +50,13 @@ function mapReactionGroupsToModel(
   );
 }
 
+type TimelinePostNode = HomeTimelineEdge["node"];
+type TimelineDisplayNode = NonNullable<TimelinePostNode["sharedPost"]> | TimelinePostNode;
+
+function getDisplayNode(node: TimelinePostNode): TimelineDisplayNode {
+  return node.sharedPost ?? node;
+}
+
 function getReplyChainIds(
   replyTarget:
     | {
@@ -82,40 +91,45 @@ function getReplyChainIds(
 
 function mapTimelineEdgeToPost(edge: HomeTimelineEdge): HomeTimelinePost {
   const { node } = edge;
-  const sharerName = edge.lastSharer?.rawName ?? edge.lastSharer?.username;
-  const replyChainIds = getReplyChainIds(node.replyTarget);
-  const publishedAtUnix = Date.parse(node.published);
+  const displayNode = getDisplayNode(node);
+  const sharer = edge.lastSharer ?? (node.sharedPost ? node.actor : null);
+  const sharerName = sharer?.rawName ?? sharer?.username;
+  const replyChainIds = getReplyChainIds(displayNode.replyTarget);
+  const publishedAtUnix = Date.parse(displayNode.published);
 
   return {
-    id: node.id,
-    kind: node.__typename === "Article" || (node.name ?? "").trim() !== "" ? "article" : "note",
-    title: node.name?.trim() ? node.name : null,
-    excerpt: stripHtmlTags(node.excerpt),
-    publishedAt: node.published,
-    href: `/posts/${node.id}`,
+    id: displayNode.id,
+    kind:
+      displayNode.__typename === "Article" || (displayNode.name ?? "").trim() !== ""
+        ? "article"
+        : "note",
+    title: displayNode.name?.trim() ? displayNode.name : null,
+    excerpt: stripHtmlTags(displayNode.excerpt),
+    publishedAt: displayNode.published,
+    href: `/posts/${displayNode.id}`,
     author: {
-      handle: node.actor.handle,
-      name: node.actor.rawName ?? node.actor.username,
-      avatarUrl: node.actor.avatarUrl ?? null,
+      handle: displayNode.actor.handle,
+      name: displayNode.actor.rawName ?? displayNode.actor.username,
+      avatarUrl: displayNode.actor.avatarUrl ?? null,
     },
     stats: {
-      reactions: node.engagementStats.reactions,
-      replies: node.engagementStats.replies,
-      shares: node.engagementStats.shares,
+      reactions: displayNode.engagementStats.reactions,
+      replies: displayNode.engagementStats.replies,
+      shares: displayNode.engagementStats.shares,
     },
     publishedAtUnix,
-    reactionGroups: mapReactionGroupsToModel(node.reactionGroups),
+    reactionGroups: mapReactionGroupsToModel(displayNode.reactionGroups),
     shareSummary:
-      edge.lastSharer && sharerName
+      sharer && sharerName
         ? {
             sharer: {
-              handle: edge.lastSharer.handle,
+              handle: sharer.handle,
               name: sharerName,
             },
-            sharersCount: edge.sharersCount,
+            sharersCount: Math.max(edge.sharersCount, 1),
           }
         : undefined,
-    threadKey: replyChainIds.at(-1) ?? node.id,
+    threadKey: replyChainIds.at(-1) ?? displayNode.id,
   };
 }
 
@@ -428,15 +442,23 @@ export function HomeTimeline(props: HomeTimelineProps) {
     <Show
       when={displayPosts().length > 0}
       fallback={
-        <section class="shell-surface rounded-[1.5rem] px-6 py-12 text-center text-sm text-[var(--text-secondary)]">
+        <Surface
+          as="section"
+          class="text-center text-sm text-fg-secondary"
+          padding="lg"
+          variant="floating"
+        >
           {copy().emptyMessage}
-        </section>
+        </Surface>
       }
     >
-      <section
+      <Surface
+        as="section"
         aria-label={copy().label}
-        class="shell-surface feed-divider overflow-hidden rounded-[1.5rem]"
+        class="feed-divider overflow-hidden"
+        padding="none"
         role="feed"
+        variant="floating"
       >
         <For each={renderItems()}>
           {(item) =>
@@ -458,27 +480,23 @@ export function HomeTimeline(props: HomeTimelineProps) {
           />
         </Show>
         <Show when={isLoadingNextPage()}>
-          <div class="border-t border-[var(--border-subtle)] px-6 py-4 text-sm text-[var(--text-secondary)]">
+          <div class="border-t border-stroke-subtle px-6 py-4 text-sm text-fg-secondary">
             Loading more posts...
           </div>
         </Show>
         <Show when={loadError()}>
           {(message) => (
-            <div class="border-t border-[var(--border-subtle)] px-6 py-4">
+            <div class="border-t border-stroke-subtle px-6 py-4">
               <div class="flex flex-wrap items-center justify-between gap-3">
-                <p class="text-sm text-[var(--text-secondary)]">{message()}</p>
-                <button
-                  class="focus-ring inline-flex items-center rounded-full border border-[var(--border-subtle)] px-3 py-2 text-sm font-medium text-[var(--text-primary)] transition hover:bg-[var(--surface-muted)]"
-                  onClick={() => void loadNextPage()}
-                  type="button"
-                >
+                <p class="text-sm text-fg-secondary">{message()}</p>
+                <Button size="sm" variant="secondary" onClick={() => void loadNextPage()}>
                   {copy().retryLabel}
-                </button>
+                </Button>
               </div>
             </div>
           )}
         </Show>
-      </section>
+      </Surface>
     </Show>
   );
 }

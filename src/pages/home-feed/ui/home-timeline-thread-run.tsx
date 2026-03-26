@@ -81,7 +81,7 @@ export function HomeTimelineThreadRun(props: HomeTimelineThreadRunProps) {
         {(offsets) => (
           <span
             aria-hidden="true"
-            class="pointer-events-none absolute left-[2.625rem] z-0 w-[2px] -translate-x-1/2 bg-[var(--border-strong)] sm:left-[2.875rem]"
+            class="pointer-events-none absolute left-[2.625rem] z-0 w-[2px] -translate-x-1/2 bg-stroke-strong sm:left-[2.875rem]"
             data-thread-run-line="true"
             style={{
               bottom: `${offsets().bottom}px`,

@@ -3,6 +3,9 @@ import Dismiss20Regular from "~icons/fluent/dismiss-20-regular";
 import Key20Filled from "~icons/fluent/key-20-filled";
 import PersonArrowLeft20Regular from "~icons/fluent/person-arrow-left-20-regular";
 import { AppIcon } from "../../../shared/ui/app-icon";
+import { Button } from "../../../shared/ui/button";
+import { Surface } from "../../../shared/ui/surface";
+import { TextField } from "../../../shared/ui/text-field";
 
 type ChallengeResult =
   | {
@@ -98,80 +101,71 @@ export function AuthModal(props: AuthModalProps) {
   return (
     <Show when={props.open}>
       <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/55 px-4 py-6">
-        <section
+        <Surface
+          as="section"
           aria-label="Sign in"
-          class="shell-surface w-full max-w-md rounded-[1.75rem] px-5 py-5 sm:px-6"
+          class="w-full max-w-md"
+          padding="lg"
+          variant="floating"
         >
           <div class="flex items-start justify-between gap-4">
             <div>
-              <p class="text-[11px] font-semibold tracking-[0.24em] text-[var(--text-muted)]">
-                Authentication
-              </p>
-              <h2 class="mt-2 text-2xl font-semibold tracking-[-0.04em] text-[var(--text-primary)]">
-                Sign in
-              </h2>
+              <p class="token-eyebrow">Authentication</p>
+              <h2 class="token-title mt-2 text-2xl">Sign in</h2>
             </div>
-            <button
+            <Button
               aria-label="Close sign in"
-              class="focus-ring inline-flex items-center gap-2 rounded-full border border-[var(--border-subtle)] px-3 py-2 text-sm text-[var(--text-secondary)]"
-              type="button"
+              size="sm"
+              variant="subtle"
               onClick={() => props.onClose?.()}
             >
               <AppIcon icon={Dismiss20Regular} size="sm" />
               Close
-            </button>
+            </Button>
           </div>
 
           <Show when={step() === "identifier"}>
             <div class="mt-6 grid gap-4">
-              <label class="grid gap-2 text-sm text-[var(--text-secondary)]">
+              <label class="grid gap-2 text-sm text-fg-secondary">
                 <span>Email or username</span>
-                <input
-                  class="focus-ring h-12 rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-4 text-[var(--text-primary)]"
+                <TextField
                   type="text"
                   value={identifier()}
                   onInput={(event) => setIdentifier(event.currentTarget.value)}
                 />
               </label>
-              <button
-                class="focus-ring inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--accent-soft)] px-4 text-sm font-medium text-[var(--text-primary)]"
+              <Button
                 disabled={loading() || identifier().trim().length === 0}
-                type="button"
                 onClick={onRequestChallenge}
               >
                 <AppIcon icon={PersonArrowLeft20Regular} size="sm" />
                 {loading() ? "Requesting..." : "Sign in"}
-              </button>
+              </Button>
             </div>
           </Show>
 
           <Show when={step() === "code"}>
             <div class="mt-6 grid gap-4">
-              <label class="grid gap-2 text-sm text-[var(--text-secondary)]">
+              <label class="grid gap-2 text-sm text-fg-secondary">
                 <span>Verification code</span>
-                <input
-                  class="focus-ring h-12 rounded-[1rem] border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-4 uppercase text-[var(--text-primary)]"
+                <TextField
+                  class="uppercase"
                   type="text"
                   value={code()}
                   onInput={(event) => setCode(event.currentTarget.value.toUpperCase())}
                 />
               </label>
-              <button
-                class="focus-ring inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[var(--border-subtle)] bg-[var(--accent-soft)] px-4 text-sm font-medium text-[var(--text-primary)]"
-                disabled={loading() || code().trim().length === 0}
-                type="button"
-                onClick={onCompleteSignIn}
-              >
+              <Button disabled={loading() || code().trim().length === 0} onClick={onCompleteSignIn}>
                 <AppIcon icon={Key20Filled} size="sm" />
                 {loading() ? "Completing..." : "Complete sign in"}
-              </button>
+              </Button>
             </div>
           </Show>
 
           <Show when={error()}>
             <p class="mt-4 text-sm text-red-700">{error()}</p>
           </Show>
-        </section>
+        </Surface>
       </div>
     </Show>
   );

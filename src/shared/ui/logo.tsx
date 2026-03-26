@@ -2,7 +2,7 @@ export function Logo() {
   return (
     <div class="flex items-center">
       <div class="w-3 h-8 bg-gradient-to-b from-white to-amber-400 rounded-xs"></div>
-      <span class="text-xl ml-3 font-code italic font-semibold tracking-[-0.04em] text-[var(--text-primary)] transition hover:text-[var(--accent-strong)] inline-flex">
+      <span class="text-xl ml-3 inline-flex font-code italic font-semibold tracking-[-0.04em] text-fg-primary transition hover:text-accent-strong">
         draft
       </span>
       <img
